@@ -6,6 +6,8 @@ import authRoutes from './routes/authRoutes.js';
 const app = express();
 
 app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
+app.use("/api/auth", authRoutes);
 
 
 app.listen(3000, () => {

@@ -13,3 +13,7 @@ export function updateProduct (req, res) {
 export function deleteProduct (req, res) {
     res.status(200).send(`Product with ID ${req.params.id} deleted`);
 };
+
+export function getProductById (req, res) {
+    res.status(200).send(`Product with ID ${req.params.id}`);
+}
