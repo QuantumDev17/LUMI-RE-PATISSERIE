@@ -25,8 +25,8 @@ npm install
 🔐 Create a .env file and add:
 
 PORT=3000
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=supersecret123
+MONGODB_URI=mongodb+srv://quantumdev:devuser123@cluster0.jck1pyv.mongodb.net/LumierePatisserie?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=83fafd0e87c34cf7b8e90951a2a40c3460b9a057d2fd7386c6eae2f876b6b5d1
 
 ▶️ Run the backend server:
 node src/server.js
