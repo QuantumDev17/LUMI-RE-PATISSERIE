@@ -1,19 +1,37 @@
-export function getAllOrders(req, res) {
-    res.status(200).send('List of orders');
-};
+import Order from '../models/Order.js';
 
-export function createOrder(req, res) {
-    res.status(201).send('Order created');
-};
+export async function createOrder(req, res) {
+  try {
+    const { products, totalAmount } = req.body;
+    const userId = req.user.id;
 
-export function updateOrder(req, res) {
-    res.status(200).send(`Order with ID ${req.params.id} updated`);
-};
+    const order = new Order({ userId, products, totalAmount });
+    await order.save();
 
-export function deleteOrder(req, res) {
-    res.status(200).send(`Order with ID ${req.params.id} deleted`);
-};
+    res.status(201).json(order);
+  } catch (error) {
+    console.error('Error creating order:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
-export function getOrderById(req, res) {
-    res.status(200).send(`Order with ID ${req.params.id}`);
-};
+export async function getAllOrders(req, res) {
+  try {
+    const orders = await Order.find().populate('userId', 'name email');
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+export async function getUserOrders(req, res) {
+  try {
+    const userId = req.params.userId;
+    const orders = await Order.find({ userId }).populate('products.productId');
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error('Error fetching user orders:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
