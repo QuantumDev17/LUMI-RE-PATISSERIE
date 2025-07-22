@@ -1,16 +1,21 @@
 import express from 'express';
-import { createProduct, getAllProducts, updateProduct,deleteProduct,getProductById } from '../controllers/productController.js';
+import {
+  getAllProducts,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getProductById
+} from '../controllers/productController.js';
+
+import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.get('/', getAllProducts);
-router.post('/', createProduct);
-router.put('/:id', updateProduct);
-router.delete('/:id', deleteProduct);
 router.get('/:id', getProductById);
 
-
+router.post('/', protect, adminOnly, createProduct);
+router.put('/:id', protect, adminOnly, updateProduct);
+router.delete('/:id', protect, adminOnly, deleteProduct);
 
 export default router;
-// This file sets up the product routes for the application.
-

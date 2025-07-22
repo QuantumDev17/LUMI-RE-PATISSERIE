@@ -1,19 +1,17 @@
-import mongoose from "mongoose";
-
-// 1- create a schema
-// 2- create a model based on the schema
+import mongoose from 'mongoose';
 
 const productSchema = new mongoose.Schema({
-    name: {type: String,required: true },
-    description: {type: String,required: true },
-    image: {type: String,required: true },
-    price: {type: Number,required: true,default: 0 },
-    category: {type: String,required: true },
-    stock: {type: Number,required: true,default: 0 },
-    isAvailable: {type: Boolean,required: true,default: true }
-}, 
-{timestamps: true} //automatically adds createdAt and updatedAt fields
-);
+  name: String,
+  description: String,
+  price: Number,
+  category: String,
+  image: String,
+  stock: Number,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
 
 const Product = mongoose.model('Product', productSchema);
 export default Product;
