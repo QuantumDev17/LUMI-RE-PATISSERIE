@@ -22,6 +22,9 @@ cd backend
 📦 Install dependencies:
 npm install
 
+📦 Make sure to install JWT for authentication:
+npm install jsonwebtoken
+
 🔐 Create a .env file and add:
 
 PORT=3000
