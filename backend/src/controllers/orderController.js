@@ -8,6 +8,9 @@ export async function createOrder(req, res) {
     const order = new Order({ userId, products, totalAmount });
     await order.save();
 
+    const populatedOrder = await Order.findById(order._id)
+      .populate('products.productId', 'name price category');
+
     res.status(201).json(order);
   } catch (error) {
     console.error('Error creating order:', error);
@@ -17,7 +20,10 @@ export async function createOrder(req, res) {
 
 export async function getAllOrders(req, res) {
   try {
-    const orders = await Order.find().populate('userId', 'name email');
+    const orders = await Order.find()
+      .populate('userId', 'name email')
+      .populate('products.productId', 'name price category');
+
     res.status(200).json(orders);
   } catch (error) {
     console.error('Error fetching orders:', error);
@@ -28,7 +34,8 @@ export async function getAllOrders(req, res) {
 export async function getUserOrders(req, res) {
   try {
     const userId = req.params.userId;
-    const orders = await Order.find({ userId }).populate('products.productId');
+    const orders = await Order.find({ userId })
+      .populate('products.productId', 'name price category');
     res.status(200).json(orders);
   } catch (error) {
     console.error('Error fetching user orders:', error);
