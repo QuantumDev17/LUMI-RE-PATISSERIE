@@ -14,11 +14,14 @@ connectDB();
 
 app.use(express.json());
 
+// ✅ Root Route - this fixes the "Cannot GET /" message
+app.get('/', (req, res) => {
+  res.send('🍰 Lumière Patisserie API is running');
+});
 
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
-
 
 app.listen(PORT, () => {
   console.log('Server is running on PORT:', PORT);
