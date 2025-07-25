@@ -13,8 +13,8 @@ function Home() {
           right: '50%',
           marginLeft: '-50vw',
           marginRight: '-50vw',
-          background: "url('/Home/desserts.jpg') center/cover no-repeat",
-          minHeight: '500px',
+          background: "url('/desserts.jpg') center/cover no-repeat",
+          minHeight: '650px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
@@ -39,7 +39,7 @@ function Home() {
           }}>
             Artfully Crafted, Made for Sharing
           </h1>
-          <button style={{
+          <Link to="/e-boutique" style={{
             background: '#fff',
             color: '#b37c40',
             fontWeight: 'bold',
@@ -49,16 +49,18 @@ function Home() {
             borderRadius: '6px',
             margin: '2rem 0',
             boxShadow: '0 2px 12px rgba(0,0,0,0.12)',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            textDecoration: 'none',
+            display: 'inline-block'
           }}>
             Browse E-Boutique
-          </button>
+          </Link>
         </div>
       </div>
 
       {/* PRODUCT SECTION */}
       <div style={{
-        width: '100%', // Full width!
+        width: '100%',
         background: '#fafafa',
         paddingTop: 40, paddingBottom: 40,
       }}>
@@ -82,7 +84,7 @@ function Home() {
         }}>
           {/* Cake */}
           <div>
-            <img src="/Home/tiramisu.png" alt="Cakes"
+            <img src="/tiramisu.png" alt="Cakes"
               style={{
                 width: 320,
                 height: 320,
@@ -101,7 +103,7 @@ function Home() {
 
           {/* Personal Desserts */}
           <div>
-            <img src="/Home/Tiramichoux.png" alt="Personal Desserts"
+            <img src="/Tiramichoux.png" alt="Personal Desserts"
               style={{
                 width: '100%',
                 maxWidth: 320,
@@ -121,7 +123,7 @@ function Home() {
 
           {/* One-Bite Assortments */}
           <div>
-            <img src="/Home/12OneBiters.png" alt="One-Bite Assortments"
+            <img src="/12OneBiters.png" alt="One-Bite Assortments"
               style={{
                 width: '100%',
                 maxWidth: 320,
@@ -185,7 +187,7 @@ function Home() {
         {/* Right side: Main image */}
         <div style={{ flex: 1, minWidth: 320, textAlign: 'center' }}>
           <img
-            src="/Home/Peaches & Cream.png"
+            src="/Peaches & Cream.png"
             alt="Petit Gateaux"
             style={{
               width: 350,
@@ -198,7 +200,7 @@ function Home() {
           {/* Below image: Supporting image */}
           <div>
             <img
-              src="/Home/Strawberry Cheesecake Tart.png"
+              src="/Strawberry Cheesecake Tart.png"
               alt="Tart"
               style={{
                 width: 270,
@@ -228,15 +230,15 @@ function Home() {
           style={{
             width: '100%',
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 400px)', 
-            gap: '30px', 
-            justifyContent: 'start', 
+            gridTemplateColumns: 'repeat(3, 400px)',
+            gap: '30px',
+            justifyContent: 'start',
             paddingLeft: -50
           }}
         >
           <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}>
             <img
-              src="/Home/Plain Sourdough.png"
+              src="/Plain Sourdough.png"
               alt="Artisanal Breads"
               style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }}
             />
@@ -259,7 +261,7 @@ function Home() {
 
           <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}>
             <img
-              src="/Home/Almond Criossant.png"
+              src="/Almond Criossant.png"
               alt="Bakery Shelf"
               style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }}
             />
@@ -282,7 +284,7 @@ function Home() {
 
           <div style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}>
             <img
-              src="/Home/Cinnamon Lemon Roll.png"
+              src="/Cinnamon Lemon Roll.png"
               alt="Spreads & Quiches"
               style={{ width: '100%', height: '320px', objectFit: 'cover', display: 'block' }}
             />
