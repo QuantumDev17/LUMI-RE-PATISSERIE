@@ -9,17 +9,20 @@ function Header() {
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '0 40px',
-        height: '80px',           // Fixed height, adjust as needed
+        height: '80px',
         background: '#fff',
         boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-        marginBottom: 0           // Remove extra margin below
+        marginBottom: 0
       }}
     >
-      {/* Logo */}
-      <div style={{ fontWeight: 'bold', fontSize: '2rem', color: '#76c7b7', letterSpacing: '2px' }}>
-        <span style={{ color: '#76c7b7' }}>LUMIÈRE</span>
-        <span style={{ color: '#b37c40', fontSize: '1.2rem', marginLeft: 4 }}>PATISSERIE</span>
-      </div>
+      {/* Clickable Logo */}
+      <Link to="/">
+        <img
+          src="/lumiere.png"
+          alt="Lumière Patisserie Logo"
+          style={{ height: '80px' }}
+        />
+      </Link>
 
       {/* Nav */}
       <nav>
@@ -40,7 +43,6 @@ function Header() {
       {/* Account (right side) */}
       <div>
         <Link to="/user" style={{ textDecoration: 'none', color: '#333', marginRight: 16 }}>Account</Link>
-        {/* Add icons if needed */}
       </div>
     </header>
   );

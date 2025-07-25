@@ -1,0 +1,74 @@
+.cake-page {
+  background-color: #f9f9f9;
+  padding: 0;
+  font-family: 'Helvetica Neue', sans-serif;
+}
+
+.sort-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem 0;
+  font-size: 16px;
+}
+
+.sort-box select {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.cake-collection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 60px;
+  padding: 0 60px 100px;
+  justify-items: center;
+}
+
+.cake-card {
+  background: transparent;
+  text-align: left;
+  padding: 0;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.cake-card:hover {
+  transform: scale(1.03);
+}
+
+.cake-card img {
+  width: 200%;
+  max-width: 350px;
+  border-radius: 0;
+  margin-bottom: 8px;
+  transition: transform 0.3s ease;
+}
+
+.cake-card h3 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 8px 0 2px;
+}
+
+.cake-card p {
+  font-size: 15px;
+  color: #333;
+  font-weight: 400;
+  margin: 0;
+}
+
+/* Optional: reduce padding for small screens */
+@media (max-width: 600px) {
+  .cake-collection {
+    padding: 0 20px 60px;
+    gap: 40px;
+  }
+
+  .cake-card img {
+    max-width: 100%;
+  }
+}

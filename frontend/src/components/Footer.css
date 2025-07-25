@@ -1,6 +1,11 @@
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
 .footer-container {
   background-color: #f5f5f5;
-  padding: 50px 30px 20px;
+  padding: 50px 30px 0; /* change bottom padding to 0 */
   color: #333;
   font-family: 'Inter', sans-serif;
   border-top: 1px solid #ddd;
@@ -50,22 +55,36 @@
   margin-bottom: 6px;
 }
 
+/* ✅ Updated footer bottom layout */
 .footer-bottom {
   border-top: 1px solid #ccc;
-  text-align: center;
-  padding-top: 20px;
-}
-
-.footer-bottom p {
+  padding-top: -10px;
+  display: flex;
+  justify-content: space-between;
+  /* keep them at far ends */
+  align-items: center;
+  flex-wrap: wrap;
   font-size: 13px;
   color: #666;
-  margin: 5px 0;
+}
+
+.footer-bottom-left {
+  font-size: 13px;
+  color: #666;
+}
+
+.footer-bottom-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #666;
 }
 
 .footer-logo {
   width: 150px;
   height: auto;
-  margin: 10px auto 0;
+  margin: 0;
   display: block;
   opacity: 0.9;
   transition: opacity 0.3s ease;
@@ -74,3 +93,4 @@
 .footer-logo:hover {
   opacity: 1;
 }
+
