@@ -10,8 +10,6 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-connectDB();
-
 app.use(express.json());
 
 // ✅ Root Route - this fixes the "Cannot GET /" message
@@ -23,6 +21,9 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/auth", authRoutes);
 
-app.listen(PORT, () => {
+// Connect to the database and start the server
+connectDB().then(() => {
+  app.listen(PORT, () => {
   console.log('Server is running on PORT:', PORT);
+  });
 });
