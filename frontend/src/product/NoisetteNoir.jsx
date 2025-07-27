@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/ProductDetail.css'; // Create this CSS file
+import '../styles/ProductDetail.css'; // CSS file
 
 const images = [
   '/Noisette Noir.png',
@@ -39,31 +39,49 @@ const NoisetteNoir = () => {
         <h2>Noisette Noir</h2>
         <p className="price">$56.00</p>
 
-        {/* Quantity */}
-        <div className="quantity-box">
-          <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))}>-</button>
-          <span>{quantity}</span>
-          <button onClick={() => setQuantity(prev => prev + 1)}>+</button>
-        </div>
+        {/* Quantity + Add to Cart in one row */}
+        <div className="cart-row">
+          <div className="quantity-wrapper">
+            <button onClick={() => setQuantity(prev => Math.max(1, prev - 1))}>−</button>
+            <input
+              type="text"
+              value={quantity}
+              readOnly
+              aria-label="Quantity"
+              className="quantity-input"
+            />
+            <button onClick={() => setQuantity(prev => prev + 1)}>+</button>
+          </div>
+          <button className="add-to-cart with-rainbow-border">
+            Add to Cart
+          </button>
 
-        <button className="add-to-cart">Add to Cart</button>
+        </div>
 
         {/* Accordion */}
         <div className="accordion">
           <div onClick={() => toggle('size')} className="accordion-header">
             Serving size <span>{open.size ? '-' : '+'}</span>
           </div>
-          {open.size && <div className="accordion-body">Serves 10-12</div>}
+          {open.size && <div className="accordion-body">Serves 10–12</div>}
 
           <div onClick={() => toggle('ingredients')} className="accordion-header">
             Ingredients <span>{open.ingredients ? '-' : '+'}</span>
           </div>
-          {open.ingredients && <div className="accordion-body">Cocoa crumble & hazelnut crunch, dark chocolate cremeux, dense milk chocolate mousse, cocoa sacher</div>}
+          {open.ingredients && (
+            <div className="accordion-body">
+              Cocoa crumble & hazelnut crunch, dark chocolate cremeux, dense milk chocolate mousse, cocoa sacher
+            </div>
+          )}
 
           <div onClick={() => toggle('allergens')} className="accordion-header">
             Allergens <span>{open.allergens ? '-' : '+'}</span>
           </div>
-          {open.allergens && <div className="accordion-body">Our products may contain dairy, nuts, and other allergens. Although we take every precaution to prevent cross-contamination, all of our products are baked in the same facility and may contain traces of allergens. If you have questions or concerns we'll be happy to provide more information.</div>}
+          {open.allergens && (
+            <div className="accordion-body">
+              Our products may contain dairy, nuts, and other allergens. Although we take every precaution to prevent cross-contamination, all of our products are baked in the same facility and may contain traces of allergens. If you have questions or concerns, we'll be happy to provide more information.
+            </div>
+          )}
         </div>
       </div>
     </div>
