@@ -44,7 +44,6 @@ body, html {
   text-decoration: underline;
 }
 
-/* ✅ Remove bullets and spacing for lists */
 .footer-column ul {
   list-style: none;
   padding-left: 0;
@@ -58,14 +57,13 @@ body, html {
 /* ✅ Updated footer bottom layout */
 .footer-bottom {
   border-top: 1px solid #ccc;
-  padding-top: -10px;
   display: flex;
   justify-content: space-between;
-  /* keep them at far ends */
   align-items: center;
   flex-wrap: wrap;
   font-size: 13px;
   color: #666;
+  padding-top: 20px;
 }
 
 .footer-bottom-left {

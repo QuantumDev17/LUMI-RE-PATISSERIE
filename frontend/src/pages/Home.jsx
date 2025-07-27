@@ -22,7 +22,6 @@ function Home() {
           overflow: 'hidden'
         }}
       >
-        {/* Overlay for text readability */}
         <div style={{
           position: "absolute",
           top: 0, left: 0, right: 0, bottom: 0,
@@ -78,11 +77,9 @@ function Home() {
           display: 'grid',
           gridTemplateColumns: 'repeat(3, minmax(350px, 1fr))',
           gap: '150px',
-          padding: '-10vw',
           justifyItems: 'start',
           alignItems: 'center',
         }}>
-          {/* Cake */}
           <div>
             <img src="/tiramisu.png" alt="Cakes"
               style={{
@@ -101,7 +98,6 @@ function Home() {
             }}>Cakes</div>
           </div>
 
-          {/* Personal Desserts */}
           <div>
             <img src="/Tiramichoux.png" alt="Personal Desserts"
               style={{
@@ -121,7 +117,6 @@ function Home() {
             }}>Personal Desserts</div>
           </div>
 
-          {/* One-Bite Assortments */}
           <div>
             <img src="/12OneBiters.png" alt="One-Bite Assortments"
               style={{
@@ -142,6 +137,7 @@ function Home() {
           </div>
         </div>
       </div>
+
       {/* FEATURED SECTION */}
       <div style={{
         display: 'flex',
@@ -152,7 +148,6 @@ function Home() {
         margin: '60px auto 0 auto',
         flexWrap: 'wrap'
       }}>
-        {/* Left side: Text & Button */}
         <div style={{ flex: 1, minWidth: 300 }}>
           <h3 style={{
             color: '#444',
@@ -184,7 +179,6 @@ function Home() {
             SEE PETITS GÂTEAUX
           </button>
         </div>
-        {/* Right side: Main image */}
         <div style={{ flex: 1, minWidth: 320, textAlign: 'center' }}>
           <img
             src="/Peaches & Cream.png"
@@ -197,7 +191,6 @@ function Home() {
               marginBottom: 24,
             }}
           />
-          {/* Below image: Supporting image */}
           <div>
             <img
               src="/Strawberry Cheesecake Tart.png"
@@ -207,13 +200,13 @@ function Home() {
                 height: 270,
                 objectFit: 'cover',
                 borderRadius: 16,
-                marginLeft: -180, // stays left aligned
+                marginLeft: -180,
                 display: 'block'
               }}
             />
           </div>
         </div>
-        {/* Boulangerie, Delicatessen & Biscuits */}
+
         <div style={{ width: '100%', marginTop: 70, marginBottom: 10 }}>
           <h2 style={{
             fontWeight: '400',
