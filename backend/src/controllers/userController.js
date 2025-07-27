@@ -26,6 +26,7 @@ export const signupUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
+  console.log('Login Payload:', req.body);
 
   try {
     const user = await User.findOne({ email });

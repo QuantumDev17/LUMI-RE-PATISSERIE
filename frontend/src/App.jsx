@@ -24,6 +24,7 @@ import Cakes from './pages/Cakes.jsx';
 import Pastries from './pages/Pastries.jsx';
 import OneBite from './pages/OneBite.jsx';
 import PersonalDesserts from './pages/PersonalDesserts.jsx';
+import NoisetteNoir from './product/NoisetteNoir';
 
 
 function App() {
