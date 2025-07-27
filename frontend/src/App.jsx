@@ -9,13 +9,17 @@ import OneBite from './pages/OneBite.jsx';
 import PersonalDesserts from './pages/PersonalDesserts.jsx';
 import MakeOrder from './pages/MakeOrder.jsx';
 import EBoutique from './pages/EBoutique.jsx';
-import Contact from './pages/Contact.jsx';
+import Contact from './pages/Contact';
+import GiftCard from './pages/GiftCard';
+import User from './pages/User';
+import OurStory from './pages/OurStory';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import Account from './pages/Account.jsx';
 import Signup from './pages/Signup.jsx';
 import Signin from './pages/Signin.jsx';
 import Logout from './pages/Logout.jsx';
+import './styles/style.css';
 
 function App() {
   return (
@@ -30,7 +34,9 @@ function App() {
         <Route path="/personal-desserts" element={<PersonalDesserts />} />
         <Route path="/make-order" element={<MakeOrder />} />
         <Route path="/e-boutique" element={<EBoutique />} />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/our-story" element={<OurStory />} />
+        <Route path="/gift-card" element={<GiftCard />} />
+        <Route path="/user" element={<User />} />
         <Route path="/account" element={<Account />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
