@@ -42,6 +42,8 @@ function Footer() {
           <p>1102 Centre St #1, Thornhill, ON L4J 3M8</p>
         </div>
       </div>
+
+      {/* Bottom Footer */}
       <div className="footer-bottom">
         <div className="footer-bottom-left">
           <p>© 2025 Lumière Patisserie.</p>
