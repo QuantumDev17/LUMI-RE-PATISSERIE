@@ -43,9 +43,15 @@ function Footer() {
         </div>
       </div>
 
+      {/* Bottom Footer */}
       <div className="footer-bottom">
-        <p>© 2025 Lumière Patisserie.<br />Created by</p>
-        <img src="/Home/quantumdev.png" alt="Team Logo" className="footer-logo" />
+        <div className="footer-bottom-left">
+          <p>© 2025 Lumière Patisserie.</p>
+        </div>
+        <div className="footer-bottom-right">
+          <span>Created by</span>
+          <img src="/quantumdev.png" alt="Team Logo" className="footer-logo" />
+        </div>
       </div>
     </footer>
   );

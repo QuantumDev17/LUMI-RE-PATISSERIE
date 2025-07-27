@@ -3,7 +3,8 @@ import Product from "../models/Product.js";
 // GET all products
 export async function getAllProducts(req, res) {
   try {
-    const products = await Product.find();
+    const products = await Product.find().sort({ createdAt: -1 }); // Sort by creation date, newest first
+    if (!products || products.length === 0) return res.status(404).json({ message: "No products found" }); // Check if products exist
     res.status(200).json(products);
   } catch (error) {
     console.error('Error in getAllProducts Controller:', error);
