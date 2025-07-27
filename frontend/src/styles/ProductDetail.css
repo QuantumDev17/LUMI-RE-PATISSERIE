@@ -1,0 +1,118 @@
+.product-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px 80px;
+  font-family: 'Poppins', sans-serif;
+}
+
+.product-images {
+  flex: 1;
+}
+
+.main-image {
+  width: 550px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0px;
+}
+
+.thumbnail-group {
+  display: flex;
+  gap: 10px;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 8px;
+}
+
+.thumbnail.active {
+  border-color: #b37c40;
+}
+
+.product-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Poppins', sans-serif;
+}
+
+.product-details h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.price {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.quantity-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.quantity-box button {
+  padding: 6px 14px;
+  font-size: 18px;
+  font-weight: bold;
+  background-color: #7cb518;
+  border: none;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.quantity-box button:hover {
+  background-color: #689f17;
+}
+
+.add-to-cart {
+  background: #fffaf4;
+  border: 2px solid #b37c40;
+  color: #b37c40;
+  padding: 12px 30px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 30px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.add-to-cart:hover {
+  background-color: #48b340;
+  color: white;
+}
+
+.accordion {
+  border-top: 1px solid #ddd;
+  font-family: 'Poppins', sans-serif;
+}
+
+.accordion-header {
+  padding: 14px 0;
+  font-weight: 500;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  color: #444;
+}
+
+.accordion-body {
+  padding: 12px 0;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.5;
+}
