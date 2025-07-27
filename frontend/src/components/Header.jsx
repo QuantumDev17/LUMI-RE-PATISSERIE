@@ -29,14 +29,13 @@ function Header() {
         marginBottom: 0
       }}
     >
-      <Link to="/">
-        <img
-          src="/lumiere.png"
-          alt="Lumière Patisserie Logo"
-          style={{ height: '80px' }}
-        />
-      </Link>
+      {/* Logo */}
+      <div style={{ fontWeight: 'bold', fontSize: '2rem', color: '#76c7b7', letterSpacing: '2px' }}>
+        <span style={{ color: '#76c7b7' }}>LUMIÈRE</span>
+        <span style={{ color: '#b37c40', fontSize: '1.2rem', marginLeft: 4 }}>PATISSERIE</span>
+      </div>
 
+      {/* Nav */}
       <nav>
         <ul style={{
           display: 'flex',
@@ -81,15 +80,8 @@ function Header() {
       </nav>
 
       <div>
-        {user ? (
-          <span style={{ color: '#333', fontWeight: 'bold' }}>
-            Welcome, {user.name}
-          </span>
-        ) : (
-          <Link to="/account" style={{ textDecoration: 'none', color: '#333' }}>
-            Account
-          </Link>
-        )}
+        <Link to="/user" style={{ textDecoration: 'none', color: '#333', marginRight: 16 }}>Account</Link>
+        {/* Add icons if needed */}
       </div>
     </header>
   );
