@@ -1,26 +1,31 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/Cakes.css';
 
 const cakes = [
     {
         name: 'Noisette Noir',
-        image: '/Strawberry.png',
-        price: '$56.00'
+        image: '/Noisette Noir.png',
+        price: '$56.00',
+        link: '/product/noisette-noir'
     },
     {
         name: 'Lumiere Cheesecake',
-        image: '/Cleopatre.png',
-        price: '$36.00'
+        image: '/Lumiere Cheesecake.png',
+        price: '$36.00',
+        link: '/product/lumiere-cheesecake'
     },
     {
         name: 'Coconut Dream (Gluten Free & Dairy Free)',
-        image: '/Coconut.png',
-        price: '$55.00'
+        image: '/Coconut Dream (Gluten Free & Dairy Free).png',
+        price: '$55.00',
+        link: '/product/coconut-dream'
     },
     {
         name: 'Fraisier',
-        image: '/ChocoHazelnut.png',
-        price: '$45.00'
+        image: '/Fraisier.png',
+        price: '$45.00',
+        link: '/product/fraisier'
     }
 ];
 
@@ -81,11 +86,13 @@ function Cake() {
             {/* Product Grid */}
             <div className="cake-collection">
                 {cakes.map((cake, index) => (
-                    <div className="cake-card" key={index}>
-                        <img src={cake.image} alt={cake.name} />
-                        <h3>{cake.name}</h3>
-                        <p>{cake.price}</p>
-                    </div>
+                    <Link to={cake.link} key={index} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <div className="cake-card">
+                            <img src={cake.image} alt={cake.name} />
+                            <h3>{cake.name}</h3>
+                            <p>{cake.price}</p>
+                        </div>
+                    </Link>
                 ))}
             </div>
         </div>
