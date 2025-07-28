@@ -4,18 +4,12 @@ import bcrypt from 'bcrypt';
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    trim: true
+    required: true
   },
   email: {
     type: String,
     required: true,
-    unique: true,
-    lowercase: true
-  },
-  phone: {
-    type: String,
-    required: true
+    unique: true
   },
   password: {
     type: String,
@@ -26,9 +20,7 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'admin'],
     default: 'user'
   }
-}, {
-  timestamps: true
-});
+}, { timestamps: true });
 
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
@@ -41,5 +33,4 @@ userSchema.methods.comparePassword = async function(password) {
 };
 
 const User = mongoose.model('User', userSchema);
-
 export default User;

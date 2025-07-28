@@ -15,16 +15,17 @@ function Signin() {
       const res = await fetch('http://localhost:3000/api/users/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      const text = await res.text();
+      console.log('Raw response:', text);
+      const data = JSON.parse(text);
 
       if (res.ok) {
-        // Store token and user info
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/'); // Redirect to homepage
+        navigate('/user'); // or homepage
       } else {
         alert(data.message || 'Login failed');
       }
@@ -66,7 +67,7 @@ const inputStyle = {
   padding: '10px',
   marginBottom: '1rem',
   border: '1px solid #ccc',
-  borderRadius: '4px'
+  borderRadius: '4px',
 };
 
 const buttonStyle = {
@@ -75,7 +76,7 @@ const buttonStyle = {
   backgroundColor: '#000',
   color: '#fff',
   border: 'none',
-  borderRadius: '4px'
+  borderRadius: '4px',
 };
 
 export default Signin;
