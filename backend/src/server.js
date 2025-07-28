@@ -13,33 +13,28 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(cors({
   origin: 'http://localhost:5173',
   credentials: true
 }));
 app.use(express.json());
 
-// Connect to DB
 connectDB();
 
-// Root Route
 app.get('/', (req, res) => {
   res.send('🍰 Lumière Patisserie API is running');
 });
 
-// Routes
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 
-// Error Handling
+
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`📅 Server is running on PORT: ${PORT}`);
 });
