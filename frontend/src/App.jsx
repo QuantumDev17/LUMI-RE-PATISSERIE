@@ -27,6 +27,7 @@ import PersonalDesserts from './pages/PersonalDesserts.jsx';
 import NoisetteNoir from './product/NoisetteNoir';
 
 
+
 function App() {
   return (
     <Router>
@@ -38,9 +39,9 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/our-story" element={<OurStory />} />
         <Route path="/gift-card" element={<GiftCard />} />
-
-        <Route path="/user" element={<User />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/user" element={<User />} />
+
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/logout" element={<Logout />} />

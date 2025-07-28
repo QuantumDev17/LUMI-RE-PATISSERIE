@@ -1,127 +1,65 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import '../styles/MyProfile.css';
 
-function Signup() {
-  const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    phone: ''
-  });
+function MyProfile() {
+  const [user, setUser] = useState(null);
+  const [error, setError] = useState('');
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  useEffect(() => {
+    const token = localStorage.getItem('token');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const res = await fetch('http://localhost:3000/api/users/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (res.ok) {
-        alert('🎉 Account created successfully!');
-        navigate('/signin');
-      } else {
-        const errorData = await res.json();
-        alert(errorData.message || 'Signup failed');
-      }
-    } catch (err) {
-      console.error('Signup error:', err);
-      alert('An error occurred during signup. Please try again.');
+    if (!token) {
+      setError('You need to sign in to view your profile.');
+      return;
     }
-  };
+
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get('http://localhost:3000/api/users/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        setUser(res.data);
+      } catch (err) {
+        console.log('Profile error:', err);
+        setError('Unauthorized. Please sign in again.');
+      }
+    };
+
+    fetchProfile();
+  }, []);
 
   return (
-    <div style={{ maxWidth: '500px', margin: '0 auto', padding: '4rem 1rem' }}>
-      <h2 style={{
-        textAlign: 'center',
-        marginBottom: '2rem',
-        fontWeight: '300',
-        letterSpacing: '1px',
-        color: '#444'
-      }}>
-        Create Account
-      </h2>
+    <div className="profile-container">
+      <h2 className="title">My Profile</h2>
+      <div className="underline"></div>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          style={inputStyle}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email Address"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          style={inputStyle}
-        />
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Phone Number"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-          style={inputStyle}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          required
-          style={inputStyle}
-        />
-        <button
-          type="submit"
-          style={{
-            width: '100%',
-            padding: '12px',
-            backgroundColor: '#333',
-            color: '#fff',
-            border: 'none',
-            fontSize: '16px',
-            cursor: 'pointer',
-            marginTop: '1rem'
-          }}
-        >
-          Sign Up
-        </button>
-      </form>
+      {error && !user ? (
+        <div className="guest-view">
+          <p className="error-text">{error}</p>
+          <div className="btn-group">
+            <Link to="/signin">
+              <button className="btn btn-dark">Sign In</button>
+            </Link>
+            <Link to="/signup">
+              <button className="btn btn-light">Create Account</button>
+            </Link>
+          </div>
+        </div>
+      ) : user ? (
+        <div className="profile-card">
+          <p><strong>Name:</strong> {user.name}</p>
+          <p><strong>Email:</strong> {user.email}</p>
+          <p><strong>Role:</strong> {user.role}</p>
+        </div>
+      ) : (
+        <p>Loading profile...</p>
+      )}
     </div>
   );
 }
 
-// shared input style for uniform look
-const inputStyle = {
-  display: 'block',
-  width: '100%',
-  padding: '12px',
-  marginBottom: '1rem',
-  border: '1px solid #ccc',
-  borderRadius: '4px',
-  fontSize: '15px',
-  fontFamily: 'inherit',
-  outline: 'none'
-};
-
-export default Signup;
+export default MyProfile;

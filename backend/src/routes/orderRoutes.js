@@ -4,7 +4,6 @@ import {
   getAllOrders,
   getUserOrders
 } from '../controllers/orderController.js';
-
 import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();

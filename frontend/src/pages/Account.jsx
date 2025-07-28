@@ -29,7 +29,7 @@ const Account = () => {
     );
   }
 
-  // Logged-in user view
+  // Logged-in user views
   return (
     <div style={{ maxWidth: '600px', margin: 'auto', padding: '4rem 1rem', textAlign: 'center' }}>
       <h2 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>My Account</h2>

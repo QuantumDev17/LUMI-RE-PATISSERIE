@@ -6,13 +6,13 @@ import {
   deleteProduct,
   getProductById
 } from '../controllers/productController.js';
-
 import { protect, adminOnly } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 router.get('/', getAllProducts);
 router.get('/:id', getProductById);
+
 
 router.post('/', protect, adminOnly, createProduct);
 router.put('/:id', protect, adminOnly, updateProduct);
