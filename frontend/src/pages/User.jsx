@@ -5,7 +5,8 @@ axios.defaults.withCredentials = true;
 
 function User() {
 
-  const { username } = useAuth();
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const username = storedUser?.name || 'Guest';
 
   const WelcomeMessage = () => {
     localStorage.setItem('user', username);
@@ -16,14 +17,6 @@ function User() {
     );
   };
 
-  return (
-    <div>
-      <UserNavigation />
-      <main>
-        <WelcomeMessage />
-      </main>
-    </div>
-  );
 };
 
 export default User;
