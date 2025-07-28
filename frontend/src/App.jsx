@@ -5,12 +5,13 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import User from './pages/User';
-import EBoutique from './pages/EBoutique'; 
+import EBoutique from './pages/EBoutique';
 import Cakes from './pages/Cakes';
 import PersonalDesserts from './pages/PersonalDesserts';
 import OneBite from './pages/OneBite';
 import Pastries from './pages/Pastries';
 import Bread from './pages/Bread';
+import MyProfile from './pages/MyProfile';
 import './styles/style.css';
 
 
@@ -31,6 +32,7 @@ function App() {
             <Route path="/onebites" element={<OneBite />} />
             <Route path="/pastries" element={<Pastries />} />
             <Route path="/bread" element={<Bread />} />
+            <Route path="/my-profile" element={<MyProfile />} />
           </Routes>
         </main>
         <Footer />
