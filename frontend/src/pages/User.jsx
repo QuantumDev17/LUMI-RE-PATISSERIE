@@ -1,25 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+axios.defaults.withCredentials = true;
 
 function User() {
-  const user = JSON.parse(localStorage.getItem('user'));
 
-  if (!user) {
+  const storedUser = JSON.parse(localStorage.getItem('user'));
+  const username = storedUser?.name || 'Guest';
+
+  const WelcomeMessage = () => {
+    localStorage.setItem('user', username);
     return (
-      <div style={{ textAlign: 'center', padding: '80px 20px' }}>
-        <h2>User not logged in.</h2>
-        <Link to="/signin">Go to Login</Link>
-      </div>
+      <h2>
+        Welcome, {username}! You can make an order and pick up at the store.
+      </h2>
     );
-  }
+  };
 
-  return (
-    <div>
-      <main style={{ padding: '2rem', textAlign: 'center' }}>
-        <h2>Welcome, {user.name}! You can make an order and pick up at the store.</h2>
-      </main>
-    </div>
-  );
-}
+};
 
 export default User;
