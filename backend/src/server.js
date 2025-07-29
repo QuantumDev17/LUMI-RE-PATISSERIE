@@ -19,8 +19,6 @@ app.use(cors({
 }));
 app.use(express.json());
 
-connectDB();
-
 app.get('/', (req, res) => {
   res.send('🍰 Lumière Patisserie API is running');
 });
