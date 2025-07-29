@@ -47,11 +47,6 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/logout" element={<Logout />} />
-
-        {/* Admin Dashboard Route */}
-        {/* Uncomment the next line if you want to protect the admin route */}
-        {/* <Route path="/admin-dashboard" element={User?.role === "admin" ? <AdminPage /> : <Navigate to="/signin" />} /> */}
-        {/* This is a placeholder for the admin dashboard, adjust as needed */}
         <Route path="/admin-dashboard" element={<AdminPage/>} />
 
         <Route path="/bread" element={<Bread />} />
