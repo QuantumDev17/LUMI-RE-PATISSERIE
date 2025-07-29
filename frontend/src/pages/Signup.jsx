@@ -1,65 +1,94 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import '../styles/MyProfile.css';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function MyProfile() {
-  const [user, setUser] = useState(null);
-  const [error, setError] = useState('');
+function Signup() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: ''
+  });
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
-    if (!token) {
-      setError('You need to sign in to view your profile.');
-      return;
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://localhost:3000/api/users/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
 
-    const fetchProfile = async () => {
-      try {
-        const res = await axios.get('http://localhost:3000/api/users/profile', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        setUser(res.data);
-      } catch (err) {
-        console.log('Profile error:', err);
-        setError('Unauthorized. Please sign in again.');
+      const data = await res.json();
+
+      if (res.ok) {
+        // ✅ Store token and user after successful signup
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        navigate('/user'); // 🟢 fixed route to go directly to profile
+      } else {
+        alert(data.message || 'Signup failed');
       }
-    };
-
-    fetchProfile();
-  }, []);
+    } catch (err) {
+      console.error('Signup error:', err);
+    }
+  };
 
   return (
-    <div className="profile-container">
-      <h2 className="title">My Profile</h2>
-      <div className="underline"></div>
-
-      {error && !user ? (
-        <div className="guest-view">
-          <p className="error-text">{error}</p>
-          <div className="btn-group">
-            <Link to="/signin">
-              <button className="btn btn-dark">Sign In</button>
-            </Link>
-            <Link to="/signup">
-              <button className="btn btn-light">Create Account</button>
-            </Link>
-          </div>
-        </div>
-      ) : user ? (
-        <div className="profile-card">
-          <p><strong>Name:</strong> {user.name}</p>
-          <p><strong>Email:</strong> {user.email}</p>
-          <p><strong>Role:</strong> {user.role}</p>
-        </div>
-      ) : (
-        <p>Loading profile...</p>
-      )}
+    <div style={{ maxWidth: '400px', margin: 'auto', padding: '3rem 1rem' }}>
+      <h2>Create Account</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          required
+          style={inputStyle}
+        />
+        <button type="submit" style={buttonStyle}>Create Account</button>
+      </form>
     </div>
   );
 }
 
-export default MyProfile;
+const inputStyle = {
+  width: '100%',
+  padding: '10px',
+  marginBottom: '1rem',
+  border: '1px solid #ccc',
+  borderRadius: '4px'
+};
+
+const buttonStyle = {
+  width: '100%',
+  padding: '10px',
+  backgroundColor: '#000',
+  color: '#fff',
+  border: 'none',
+  borderRadius: '4px'
+};
+
+export default Signup;
