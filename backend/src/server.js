@@ -19,8 +19,6 @@ app.use(cors({
 }));
 app.use(express.json());
 
-connectDB();
-
 app.get('/', (req, res) => {
   res.send('🍰 Lumière Patisserie API is running');
 });
@@ -35,6 +33,9 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
-  console.log(`📅 Server is running on PORT: ${PORT}`);
+// Connect to the database and start the server
+connectDB().then(() => {
+  app.listen(PORT, () => {
+  console.log('Server is running on PORT:', PORT);
+  });
 });

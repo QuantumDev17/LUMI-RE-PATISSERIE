@@ -1,5 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+
 
 import Home from './pages/Home.jsx';
 import './styles/style.css';
@@ -17,6 +18,7 @@ import Account from './pages/Account.jsx';
 import Signup from './pages/Signup.jsx';
 import Signin from './pages/Signin.jsx';
 import Logout from './pages/Logout.jsx';
+import AdminPage from './pages/AdminPage.jsx';
 
 
 import Bread from './pages/Bread.jsx';
@@ -45,6 +47,12 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <Route path="/logout" element={<Logout />} />
+
+        {/* Admin Dashboard Route */}
+        {/* Uncomment the next line if you want to protect the admin route */}
+        {/* <Route path="/admin-dashboard" element={User?.role === "admin" ? <AdminPage /> : <Navigate to="/signin" />} /> */}
+        {/* This is a placeholder for the admin dashboard, adjust as needed */}
+        <Route path="/admin-dashboard" element={<AdminPage/>} />
 
         <Route path="/bread" element={<Bread />} />
         <Route path="/cakes" element={<Cakes />} />
