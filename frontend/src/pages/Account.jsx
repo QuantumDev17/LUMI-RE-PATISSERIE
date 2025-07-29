@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Account = () => {
-  const navigate = useNavigate();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -17,19 +16,25 @@ const Account = () => {
     return (
       <div style={{ textAlign: 'center', padding: '80px 20px' }}>
         <h1 style={{ fontSize: '2rem', marginBottom: '40px' }}>Welcome to Your Account</h1>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '40px', marginBottom: '30px' }}>
           <Link to="/signin">
             <button style={buttonStyleDark}>Sign In</button>
           </Link>
           <Link to="/signup">
-            <button style={buttonStyleLight}>Create Account</button>
+            <button style={buttonStyleDark}>Create Account</button>
+          </Link>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '20px' }}>
+          <span style={{ color: '#666', fontSize: '1rem', marginBottom: '10px' }}>or</span>
+          <Link to="/e-boutique">
+            <button style={buttonStyleLight}>Continue as Guest</button>
           </Link>
         </div>
       </div>
     );
   }
 
-  // Logged-in user views
+  // Logged-in user view
   return (
     <div style={{ maxWidth: '600px', margin: 'auto', padding: '4rem 1rem', textAlign: 'center' }}>
       <h2 style={{ marginBottom: '1rem', fontSize: '1.5rem' }}>My Account</h2>
@@ -61,9 +66,9 @@ const buttonStyleDark = {
 const buttonStyleLight = {
   padding: '12px 24px',
   fontSize: '1rem',
-  backgroundColor: '#666',
-  color: '#fff',
-  border: 'none',
+  backgroundColor: '#fff',
+  color: '#333',
+  border: '1px solid #333',
   borderRadius: '4px',
   cursor: 'pointer'
 };
