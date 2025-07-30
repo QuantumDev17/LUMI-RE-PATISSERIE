@@ -84,13 +84,6 @@ function Header() {
               <Link to="/account" style={linkStyle}>Account</Link>
             </li>
           )}
-          {user?.role === 'admin' && (
-            <li>
-              <Link to="/admin-dashboard" style={{ textDecoration: 'none', color: '#333' }}>
-                Dashboard
-              </Link>
-            </li>
-          )}
         </ul>
       </nav>
     </header>
