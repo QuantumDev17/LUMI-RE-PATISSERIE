@@ -10,7 +10,7 @@ function Signup() {
   });
 
   // Use env variable, fallback to localhost
-  const API_BASE = process.env.VITE_API_URL || 'http://localhost:3000';
+  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
