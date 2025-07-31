@@ -9,7 +9,7 @@ function MyProfile() {
   const token = localStorage.getItem('token');
 
   // Use env variable, fallback to localhost for dev
-  const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+  const API_BASE = process.env.VITE_API_URL || 'http://localhost:3000';
 
   useEffect(() => {
     // Show from localStorage instantly
