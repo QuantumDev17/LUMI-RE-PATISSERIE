@@ -17,18 +17,18 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
   'http://localhost:5173',
   'https://lumi-re-patisserie.vercel.app',
-  'https://lumi-re-patisserie-lg98kf40-quantumdev17s-projects.vercel.app', // add all preview URLs if needed
+  'https://lumi-re-patisserie-2rgh41n7q-quantumdev17s-projects.vercel.app/', // add all preview URLs if needed
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
     }
-    return callback(new Error('Not allowed by CORS'));
   },
-  credentials: true
+  credentials: true,
 }));
 
 app.use(express.json());
