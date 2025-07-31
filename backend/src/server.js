@@ -17,11 +17,13 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
   'http://localhost:5173',
   'https://lumi-re-patisserie.vercel.app',
-  'https://lumi-re-patisserie-2rgh41n7q-quantumdev17s-projects.vercel.app/', // add all preview URLs if needed
+  'https://lumi-re-patisserie-2rgh41n7q-quantumdev17s-projects.vercel.app',
+  // Add more preview/branch URLs if you have them!
 ];
 
 app.use(cors({
   origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman) or from allowedOrigins
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
