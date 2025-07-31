@@ -16,21 +16,14 @@ const PORT = process.env.PORT || 3000;
 // ======== CORS FIXED FOR LOCAL & VERCEL ========
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://lumi-re-patisserie.vercel.app', // your live site
+  'https://lumi-re-patisserie-2rgh41n7q-quantumdev17s-projects.vercel.app', // your live site
   // Add preview/branch URLs below if needed:
   // 'https://lumi-re-patisserie-<branch>.<your-team>.vercel.app',
 ];
 
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like Postman/curl)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-    return callback(new Error('Not allowed by CORS'));
-  },
-  credentials: true
+  origin: allowedOrigins,
+  credentials: true,
 }));
 
 app.use(express.json());
