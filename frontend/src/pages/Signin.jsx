@@ -5,6 +5,9 @@ function Signin() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
 
+  // Use env var, fallback to localhost
+  const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -12,7 +15,7 @@ function Signin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:3000/api/users/login', {
+      const res = await fetch(`${API_BASE}/api/users/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),

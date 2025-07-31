@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import ProductForm from '../components/ProductForm'; // adjust the path if needed
+import ProductForm from '../components/ProductForm'; 
 
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
@@ -7,7 +7,7 @@ const AdminPage = () => {
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const token = localStorage.getItem('token'); // Adjust based on your auth
+  const token = localStorage.getItem('token'); 
 
   useEffect(() => {
     fetchProducts();
@@ -15,7 +15,7 @@ const AdminPage = () => {
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch('http://localhost:3000/api/Products', {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

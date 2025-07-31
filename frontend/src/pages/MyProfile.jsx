@@ -8,14 +8,14 @@ function MyProfile() {
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
 
-  useEffect(() => {
-    // Load from localStorage immediately for instant display
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+  // Use env variable, fallback to localhost for dev
+  const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:3000';
 
-    // If no token, block profile fetch
+  useEffect(() => {
+    // Show from localStorage instantly
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) setUser(JSON.parse(storedUser));
+
     if (!token) {
       setError('Sign in to view your Profile.');
       return;
@@ -23,13 +23,13 @@ function MyProfile() {
 
     const fetchProfile = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/users/profile', {
+        const res = await axios.get(`${API_BASE}/api/users/profile`, {
           headers: {
             Authorization: `Bearer ${token}`
           }
         });
-        setUser(res.data); // update latest info from backend
-        localStorage.setItem('user', JSON.stringify(res.data)); // update storage
+        setUser(res.data); // update with fresh info
+        localStorage.setItem('user', JSON.stringify(res.data));
       } catch (err) {
         console.error('Profile fetch error:', err);
         setError('Unauthorized. Please login again.');
@@ -37,6 +37,7 @@ function MyProfile() {
     };
 
     fetchProfile();
+    // eslint-disable-next-line
   }, [token]);
 
   return (

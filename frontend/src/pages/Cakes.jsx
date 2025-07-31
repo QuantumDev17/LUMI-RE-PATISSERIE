@@ -9,7 +9,7 @@ function Cake() {
   useEffect(() => {
     const fetchCakes = async () => {
       try {
-        const res = await fetch('http://localhost:3000/api/Products'); 
+       const res = await fetch(`${process.env.REACT_APP_API_URL}/api/users/login`); 
         const data = await res.json();
 
         const filtered = data.filter(
