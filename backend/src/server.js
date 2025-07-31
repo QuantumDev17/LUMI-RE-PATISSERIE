@@ -13,17 +13,22 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ======== CORS FIXED FOR LOCAL & VERCEL ========
+// ALLOW BOTH LOCALHOST AND VERCEL FRONTEND
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://lumi-re-patisserie-2rgh41n7q-quantumdev17s-projects.vercel.app', // your live site
-  // Add preview/branch URLs below if needed:
-  // 'https://lumi-re-patisserie-<branch>.<your-team>.vercel.app',
+  'https://lumi-re-patisserie.vercel.app',
+  'https://lumi-re-patisserie-lg98kf40-quantumdev17s-projects.vercel.app', // add all preview URLs if needed
 ];
 
 app.use(cors({
-  origin: allowedOrigins,
-  credentials: true,
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
+  credentials: true
 }));
 
 app.use(express.json());
