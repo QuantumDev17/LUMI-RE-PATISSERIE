@@ -1,21 +1,25 @@
 import { useEffect, useState } from 'react';
 import ProductForm from '../components/ProductForm'; 
 
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  const token = localStorage.getItem('token'); 
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     fetchProducts();
+    // eslint-disable-next-line
   }, []);
 
   const fetchProducts = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/users/login`, {
+      // ✅ Correct endpoint for all products
+      const res = await fetch(`${API_BASE}/api/products`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -40,10 +44,9 @@ const AdminPage = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Delete this product?")) return;
-
+    if (!window.confirm("Delete this product?")) return;
     try {
-      await fetch(`http://localhost:3000/api/Products/${id}`, {
+      await fetch(`${API_BASE}/api/products/${id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${token}`,
@@ -58,8 +61,8 @@ const AdminPage = () => {
   const handleFormSubmit = async (formData) => {
     const method = selectedProduct ? 'PUT' : 'POST';
     const url = selectedProduct
-      ? `http://localhost:3000/api/Products/${selectedProduct._id}`
-      : 'http://localhost:3000/api/Products';
+      ? `${API_BASE}/api/products/${selectedProduct._id}`
+      : `${API_BASE}/api/products`;
 
     try {
       const res = await fetch(url, {
@@ -72,7 +75,6 @@ const AdminPage = () => {
       });
 
       if (!res.ok) throw new Error('Failed to save product');
-
       await fetchProducts();
       setShowForm(false);
       setSelectedProduct(null);
