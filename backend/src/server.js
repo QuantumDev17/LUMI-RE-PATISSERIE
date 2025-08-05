@@ -18,6 +18,7 @@ const allowedOrigins = [
   'http://localhost:5173',
   'https://lumi-re-patisserie.vercel.app',
   'https://lumi-re-patisserie-2rgh41n7q-quantumdev17s-projects.vercel.app',
+  'https://lumi-re-patisserie-kkuttziti-quantumdev17s-projects.vercel.app'
   // Add more preview/branch URLs if you have them!
 ];
 
