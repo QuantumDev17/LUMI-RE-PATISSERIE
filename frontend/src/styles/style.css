@@ -203,75 +203,7 @@ button {
   text-decoration: underline;
 }
 
-/* --- Responsive Header and Navigation --- */
 @media (max-width: 600px) {
-
-  .cake-card img,
-  .product-card img {
-    width: 100% !important;
-    height: auto !important;
-    object-fit: contain !important;
-    border-radius: 8px;
-    display: block;
-    margin: 0 auto;
-    max-height: 260px;
-    background: #fff;
-  }
-
-  nav ul {
-    flex-direction: column !important;
-    align-items: flex-start;
-    gap: 0;
-    position: absolute;
-    top: 80px;
-    left: 0;
-    width: 100vw;
-    background: #fff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    display: none;
-    z-index: 1000;
-  }
-
-  nav ul.show {
-    display: flex !important;
-  }
-
-  nav ul li {
-    display: block;
-    margin: 10px 0 10px 20px;
-  }
-
-  .hamburger {
-    display: block !important;
-    position: absolute;
-    right: 20px;
-    top: 25px;
-    font-size: 2rem;
-    background: none;
-    border: none;
-    color: #b37c40;
-    cursor: pointer;
-    z-index: 1100;
-  }
-}
-
-/* Hamburger menu is hidden on desktop */
-.hamburger {
-  display: none;
-}
-
-@media (max-width: 800px) {
-
-  /* Logo smaller on mobile */
-  header img,
-  .logo img {
-    height: 50px !important;
-  }
-}
-
-/* --- Responsive Product Grid --- */
-@media (max-width: 600px) {
-
   .cake-collection,
   .product-collection,
   .card-grid {
@@ -279,23 +211,47 @@ button {
     flex-direction: column !important;
     gap: 1.5rem !important;
     align-items: center !important;
+    width: 100vw !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    box-sizing: border-box;
   }
 
   .cake-card,
   .product-card {
-    width: 90vw !important;
-    max-width: 340px !important;
-    margin: 0 auto;
-    padding: 1rem 0.5rem !important;
-    box-sizing: border-box;
+    width: 95vw !important;
+    max-width: 350px !important;
+    margin: 0 auto 1rem auto !important;
+    padding: 0.7rem 0.3rem !important;
     text-align: center;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
   }
 
   .cake-card img,
   .product-card img {
     width: 100% !important;
     height: auto !important;
-    object-fit: cover;
-    border-radius: 8px;
+    max-height: 210px !important;
+    object-fit: contain !important;
+    border-radius: 10px !important;
+    margin: 0 auto !important;
+    background: #fff;
+    display: block;
   }
+
+  /* General Images: fallback if no class applied */
+  img {
+    max-width: 98vw !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 10px !important;
+  }
+}
+
+/* Fix unwanted overflow and horizontal scroll */
+body {
+  overflow-x: hidden;
 }
