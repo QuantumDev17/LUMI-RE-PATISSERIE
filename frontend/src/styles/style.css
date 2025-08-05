@@ -196,55 +196,34 @@ button {
   text-decoration: underline;
 }
 
-/*# sourceMappingURL=style.css.map */
-/* --- Responsive Header & Nav --- */
-.header-bar {
-  width: 100%;
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  height: 80px;
-  position: relative;
-  z-index: 1000;
-}
-.hamburger {
-  display: none;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: #b37c40;
-  cursor: pointer;
-  margin-left: auto;
-}
-.nav-menu {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  transition: all 0.3s;
-}
 @media (max-width: 800px) {
-  .nav-menu {
-    display: none;
-    flex-direction: column;
-    background: #fff;
-    position: absolute;
-    top: 80px;
-    left: 0;
-    right: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    padding: 1.2rem 0;
-    z-index: 999;
+  header {
+    padding: 0 10px !important;
+    height: 56px !important;
   }
-  .nav-menu.open {
-    display: flex;
+  header img {
+    height: 38px !important;
   }
-  .hamburger {
-    display: block;
+  nav {
+    position: static !important;
+    left: auto !important;
+    transform: none !important;
+  }
+  nav ul {
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+    font-size: 12px !important;
+    justify-content: flex-end !important;
+  }
+  nav ul li {
+    margin-right: 8px !important;
+  }
+}
+
+/* If you have .container or other wrappers, you can tweak them as well: */
+@media (max-width: 800px) {
+  .container {
+    padding: 0 6px !important;
+    min-width: 0 !important;
   }
 }
