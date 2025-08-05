@@ -197,91 +197,54 @@ button {
 }
 
 /*# sourceMappingURL=style.css.map */
-
-/* ---------- MOBILE RESPONSIVE STYLES ---------- */
-@media (max-width: 600px) {
-
-  body, main, .container {
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100vw !important;
-    overflow-x: hidden;
+/* --- Responsive Header & Nav --- */
+.header-bar {
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 80px;
+  position: relative;
+  z-index: 1000;
+}
+.hamburger {
+  display: none;
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: #b37c40;
+  cursor: pointer;
+  margin-left: auto;
+}
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  transition: all 0.3s;
+}
+@media (max-width: 800px) {
+  .nav-menu {
+    display: none;
+    flex-direction: column;
+    background: #fff;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 1.2rem 0;
+    z-index: 999;
   }
-
-  header, .header, footer {
-    padding: 10px 4vw !important;
-    text-align: center;
+  .nav-menu.open {
+    display: flex;
   }
-
-  .logo {
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
-  }
-
-  nav ul, .nav-list {
-    flex-direction: column !important;
-    gap: 0.5rem !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 0 !important;
-  }
-  nav ul li, .nav-list li {
-    display: block !important;
-    margin: 0 !important;
-  }
-
-  .order-table, .order-details-table {
-    font-size: 13px;
-    min-width: 200px;
-    width: 100vw !important;
-    overflow-x: auto;
+  .hamburger {
     display: block;
-  }
-
-  .cake-collection, .cake-page .cake-collection {
-    grid-template-columns: 1fr !important;
-    padding: 10px 0;
-  }
-
-  .cake-card img, img {
-    width: 90vw !important;
-    height: auto !important;
-    max-width: 95vw !important;
-    margin: 0 auto;
-    display: block;
-  }
-
-  button, .Navigation {
-    padding: 12px 10px !important;
-    font-size: 15px !important;
-    width: 100% !important;
-    margin: 7px 0 !important;
-  }
-
-  .profile-card, .profile-container, .cake-card {
-    width: 97vw !important;
-    box-sizing: border-box;
-    padding: 6vw 2vw !important;
-  }
-
-  section h2 {
-    font-size: 20px;
-  }
-
-  /* Remove container max width */
-  .container {
-    max-width: 100vw !important;
-    flex-direction: column !important;
-    gap: 1rem !important;
-  }
-
-  /* Optional: shrink fonts */
-  body, p, h1, h2, h3, h4, h5 {
-    font-size: 1rem !important;
-  }
-
-  /* Hide scroll overflow on x axis */
-  html, body {
-    overflow-x: hidden !important;
   }
 }
