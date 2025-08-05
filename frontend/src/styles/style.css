@@ -196,34 +196,84 @@ button {
   text-decoration: underline;
 }
 
+/* --- Responsive Header and Navigation --- */
 @media (max-width: 800px) {
   header {
-    padding: 0 10px !important;
-    height: 56px !important;
+    padding: 0 10px;
+    height: auto;
   }
-  header img {
-    height: 38px !important;
-  }
-  nav {
-    position: static !important;
-    left: auto !important;
-    transform: none !important;
-  }
+
   nav ul {
-    flex-wrap: wrap !important;
-    gap: 12px !important;
-    font-size: 12px !important;
-    justify-content: flex-end !important;
+    flex-direction: column !important;
+    align-items: flex-start;
+    gap: 0;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    display: none;
+    z-index: 1000;
   }
+
+  nav ul.show {
+    display: flex !important;
+  }
+
   nav ul li {
-    margin-right: 8px !important;
+    display: block;
+    margin: 10px 0 10px 20px;
+  }
+
+  .hamburger {
+    display: block !important;
+    position: absolute;
+    right: 20px;
+    top: 25px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    color: #b37c40;
+    cursor: pointer;
+    z-index: 1100;
   }
 }
 
-/* If you have .container or other wrappers, you can tweak them as well: */
+/* Hamburger menu is hidden on desktop */
+.hamburger {
+  display: none;
+}
+
 @media (max-width: 800px) {
-  .container {
-    padding: 0 6px !important;
-    min-width: 0 !important;
+  /* Logo smaller on mobile */
+  header img,
+  .logo img {
+    height: 50px !important;
+  }
+}
+
+/* --- Responsive Product Grid --- */
+@media (max-width: 600px) {
+  .cake-collection, .product-collection, .card-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    align-items: center !important;
+  }
+
+  .cake-card, .product-card {
+    width: 90vw !important;
+    max-width: 340px !important;
+    margin: 0 auto;
+    padding: 1rem 0.5rem !important;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .cake-card img, .product-card img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover;
+    border-radius: 8px;
   }
 }
