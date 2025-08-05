@@ -67,6 +67,7 @@ footer p {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -138,9 +139,11 @@ button {
 
 /************ Navigation Buttons **************/
 .Navigation {
-  background-color: #555; /* Dark Gray */
+  background-color: #555;
+  /* Dark Gray */
   border: none;
-  color: #fff; /* White */
+  color: #fff;
+  /* White */
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
@@ -150,11 +153,15 @@ button {
   cursor: pointer;
   border-radius: 5px;
 }
+
 .Navigation:hover {
-  background-color: #333; /* Slightly lighter Gray */
+  background-color: #333;
+  /* Slightly lighter Gray */
 }
+
 .Navigation:active {
-  background-color: #222; /* Even darker Gray */
+  background-color: #222;
+  /* Even darker Gray */
 }
 
 .header {
@@ -197,10 +204,18 @@ button {
 }
 
 /* --- Responsive Header and Navigation --- */
-@media (max-width: 800px) {
-  header {
-    padding: 0 10px;
-    height: auto;
+@media (max-width: 600px) {
+
+  .cake-card img,
+  .product-card img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    max-height: 260px;
+    background: #fff;
   }
 
   nav ul {
@@ -212,7 +227,7 @@ button {
     left: 0;
     width: 100vw;
     background: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     display: none;
     z-index: 1000;
   }
@@ -246,6 +261,7 @@ button {
 }
 
 @media (max-width: 800px) {
+
   /* Logo smaller on mobile */
   header img,
   .logo img {
@@ -255,14 +271,18 @@ button {
 
 /* --- Responsive Product Grid --- */
 @media (max-width: 600px) {
-  .cake-collection, .product-collection, .card-grid {
+
+  .cake-collection,
+  .product-collection,
+  .card-grid {
     display: flex !important;
     flex-direction: column !important;
     gap: 1.5rem !important;
     align-items: center !important;
   }
 
-  .cake-card, .product-card {
+  .cake-card,
+  .product-card {
     width: 90vw !important;
     max-width: 340px !important;
     margin: 0 auto;
@@ -270,7 +290,9 @@ button {
     box-sizing: border-box;
     text-align: center;
   }
-  .cake-card img, .product-card img {
+
+  .cake-card img,
+  .product-card img {
     width: 100% !important;
     height: auto !important;
     object-fit: cover;
