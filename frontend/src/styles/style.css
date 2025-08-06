@@ -381,3 +381,32 @@ body {
     border: none;
   }
 }
+
+@media (max-width: 750px) {
+  .home-patisserie-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2rem !important;
+    padding: 0 !important;
+    margin: 0 auto !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .home-patisserie-grid img {
+    width: 90vw !important;
+    max-width: 340px !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 16px !important;
+    margin: 0 auto !important;
+    display: block;
+  }
+
+  .home-patisserie-grid div[style*="textAlign: center"] {
+    font-size: 1.2rem !important;
+    margin-top: 10px !important;
+    text-align: center !important;
+  }
+}
