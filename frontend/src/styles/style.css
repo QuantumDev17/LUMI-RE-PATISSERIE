@@ -319,122 +319,65 @@ body {
   }
 }
 
-/* --- Responsive Product Grid --- */
-@media (max-width: 600px) {
-  .cake-collection,
-  .product-collection,
-  .card-grid,
-  .patisserie-grid {
+/* --- Fix Header Logo/Nav Overlap on Mobile --- */
+@media (max-width: 700px) {
+  header {
+    padding: 0 8px !important;
+    height: 60px !important;
+    min-height: 60px !important;
     display: flex !important;
-    flex-direction: column !important;
-    gap: 1.5rem !important;
     align-items: center !important;
-    width: 100vw !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    box-sizing: border-box;
-  }
-
-  .cake-card,
-  .product-card {
-    width: 95vw !important;
-    max-width: 350px !important;
-    margin: 0 auto 1rem auto !important;
-    padding: 0.7rem 0.3rem !important;
-    text-align: center;
-    box-sizing: border-box;
+    justify-content: space-between !important;
+    position: sticky;
+    top: 0;
+    z-index: 999;
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.03);
   }
 
-  .cake-card img,
-  .product-card img {
+  header img, .logo img {
+    height: 38px !important;
+    width: auto !important;
+    margin: 0 0 0 2px;
+    object-fit: contain !important;
+  }
+
+  nav {
     width: 100% !important;
-    height: auto !important;
-    max-height: 210px !important;
-    object-fit: contain !important;
-    border-radius: 10px !important;
-    margin: 0 auto !important;
-    background: #fff;
-    display: block;
+    overflow-x: auto !important;
+    background: #fff !important;
   }
 
-  /* General Images: fallback if no class applied */
-  img {
-    max-width: 98vw !important;
-    height: auto !important;
-    object-fit: contain !important;
-    border-radius: 10px !important;
-  }
-}
-
-/* Patisserie Section (3-column grid to 1-column on mobile) */
-@media (max-width: 750px) {
-  .patisserie-grid,
-  .patisserie-section > div[style*='grid'],
-  .home-patisserie-grid {
+  nav ul {
     display: flex !important;
-    flex-direction: column !important;
-    gap: 2rem !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    gap: 14px !important;
+    font-size: 14px !important;
     align-items: center !important;
-    width: 100vw !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
+    white-space: nowrap;
+    padding: 4px 8px !important;
+    margin: 0 !important;
+    list-style: none;
+    scrollbar-width: none; /* Firefox */
   }
-  .patisserie-section img,
-  .home-patisserie-grid img,
-  .patisserie-section > div[style*='grid'] img {
-    width: 90vw !important;
-    max-width: 340px !important;
-    height: auto !important;
-    object-fit: contain !important;
-    border-radius: 18px !important;
-  }
-}
 
-/* Featured/Peaches section: Stack side by side blocks */
-@media (max-width: 900px) {
-  .home-feature-flex,
-  div[style*='display: flex'][style*='gap: 64px'] {
-    flex-direction: column !important;
-    gap: 2rem !important;
-    align-items: center !important;
-    width: 100vw !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
+  nav ul::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
   }
-  .home-feature-flex img,
-  div[style*='display: flex'][style*='gap: 64px'] img {
-    width: 95vw !important;
-    max-width: 340px !important;
-    height: auto !important;
-    margin: 0 auto 20px auto !important;
-    object-fit: contain !important;
-  }
-}
 
-/* Bakery Cards (Boulangerie grid): stack and fix cut images */
-@media (max-width: 800px) {
-  .bakery-grid,
-  div[style*='gridTemplateColumns'][style*='auto-fit'] {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 2rem !important;
-    align-items: center !important;
-    width: 100vw !important;
-    margin: 0 auto !important;
-    padding: 0 !important;
-    box-sizing: border-box;
+  nav ul li {
+    display: inline-block !important;
+    margin: 0 !important;
   }
-  .bakery-grid img,
-  div[style*='gridTemplateColumns'][style*='auto-fit'] img {
-    width: 90vw !important;
-    max-width: 350px !important;
-    height: auto !important;
-    object-fit: contain !important;
-    border-radius: 16px !important;
-    margin: 0 auto !important;
-    display: block;
+
+  nav ul li a,
+  nav ul li button {
+    padding: 6px 10px !important;
+    font-size: 14px !important;
+    color: #333 !important;
+    text-decoration: none;
+    background: none !important;
+    border: none;
   }
 }
