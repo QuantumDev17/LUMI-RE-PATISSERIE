@@ -82,7 +82,7 @@ function Home() {
           }}>
             {/* Cakes */}
             <div>
-              <img src="/tiramisu.png" alt="Cakes" style={{
+              <img src="/cake/tiramisu.png" alt="Cakes" style={{
                 width: 320,
                 height: 320,
                 borderRadius: 24,
@@ -100,7 +100,7 @@ function Home() {
 
             {/* Personal Desserts */}
             <div>
-              <img src="/Tiramichoux.png" alt="Personal Desserts" style={{
+              <img src="/personal-dessert/Tiramichoux.png" alt="Personal Desserts" style={{
                 width: 320,
                 height: 320,
                 borderRadius: 24,
@@ -118,7 +118,7 @@ function Home() {
 
             {/* One-Bite Assortments */}
             <div>
-              <img src="/12OneBiters.png" alt="One-Bite Assortments" style={{
+              <img src="/one-bite/12.png" alt="One-Bite Assortments" style={{
                 width: 320,
                 height: 320,
                 borderRadius: 24,
@@ -179,7 +179,7 @@ function Home() {
           </div>
 
           <div style={{ flex: 1, minWidth: 320, textAlign: 'center' }}>
-            <img src="/Peaches & Cream.png" alt="Petit Gateaux" style={{
+            <img src="/personal-dessert/Peaches & Cream.png" alt="Petit Gateaux" style={{
               width: 350,
               height: 350,
               objectFit: 'cover',
@@ -187,7 +187,7 @@ function Home() {
               marginBottom: 24,
             }} />
             <div>
-              <img src="/Strawberry Cheesecake Tart.png" alt="Tart" style={{
+              <img src="/personal-dessert/Strawberry Cheesecake Tart.png" alt="Tart" style={{
                 width: 270,
                 height: 270,
                 objectFit: 'cover',
@@ -219,9 +219,9 @@ function Home() {
         }}>
           {/* Each bakery card */}
           {[
-            { src: '/Plain Sourdough.png', title: 'BOULANGERIE', subtitle: 'Artisanal Breads' },
-            { src: '/Almond Criossant.png', title: 'ÉTAGÈRE DE BOULANGERIE', subtitle: 'Bakery Shelf' },
-            { src: '/Cinnamon Lemon Roll.png', title: 'DELICATESSEN', subtitle: 'Spreads & Quiches' },
+            { src: '/bread/Plain-Sourdough.png', title: 'BOULANGERIE', subtitle: 'Artisanal Breads' },
+            { src: '/bread/Almond-Criossant.png', title: 'ÉTAGÈRE DE BOULANGERIE', subtitle: 'Bakery Shelf' },
+            { src: '/bread/Cinnamon-Lemon-Roll.png', title: 'DELICATESSEN', subtitle: 'Spreads & Quiches' },
           ].map((item, index) => (
             <div key={index} style={{ position: 'relative', overflow: 'hidden', borderRadius: 16 }}>
               <img

@@ -54,7 +54,7 @@ export default function OurStory() {
         }}>
           <div style={{ flex: '1 1 500px' }}>
             <img
-              src="/Home/be-our-guest-bread.png"
+              src="/be-our-guest-bread.png"
               alt="Be our guest pastry"
               style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
             />
@@ -106,7 +106,7 @@ export default function OurStory() {
           </div>
           <div style={{ flex: '1 1 500px' }}>
             <img
-              src="/Home/lumiere-light.png"
+              src="/lumiere-light.png"
               alt="Rainbow light projection"
               style={{ width: '100%', height: 'auto', borderRadius: '8px' }}
             />
@@ -131,7 +131,7 @@ export default function OurStory() {
     }}
   >
     <img
-      src="/Home/cream-and-crumb.png"
+      src="\personal-dessert\Cream & Crumb.png"
       alt="E-Boutique"
       style={{
         width: '100%',
@@ -165,7 +165,7 @@ export default function OurStory() {
     }}
   >
     <img
-      src="/Home/country-loaf.png"
+      src="/bread/country-loaf.png"
       alt="Visit Lumière"
       style={{
         width: '100%',

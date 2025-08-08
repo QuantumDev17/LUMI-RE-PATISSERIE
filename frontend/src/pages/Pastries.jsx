@@ -14,7 +14,7 @@ function Pastries() {
                     right: '50%',
                     marginLeft: '-50vw',
                     marginRight: '-50vw',
-                    background: "url('/croisants.jpg') center/cover no-repeat",
+                    background: "url('/pastry/croisants.jpg') center/cover no-repeat",
                     minHeight: '500px',
                     display: 'flex',
                     flexDirection: 'column',

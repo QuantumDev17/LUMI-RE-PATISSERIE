@@ -4,11 +4,11 @@ import ProductCard from '../components/ProductCard';
 import '../styles/EBoutique.css';
 
 const categories = [
-  { name: 'Cakes', image: '/Coconut.png', link: '/cakes' },
-    { name: 'Personal Desserts', image: '/Heart.png', link: '/personal-desserts' },
-  { name: 'One-Bite Creations', image: '/Bitters.png', link: '/onebites' },
-  { name: 'Pastries', image: '/pastry.png', link: '/pastries' },
-  { name: 'Breads', image: '/breads.png', link: '/bread' },
+  { name: 'Cakes', image: '/cake/Coconut.png', link: '/cakes' },
+    { name: 'Personal Desserts', image: '/personal-dessert/Heart.png', link: '/personal-desserts' },
+  { name: 'One-Bite Creations', image: '/Bitters.png', link: '/onebite' },
+  { name: 'Pastries', image: '/pastry/pastry.png', link: '/pastries' },
+  { name: 'Breads', image: 'breads.png', link: '/bread' },
   { name: 'Delicatessen', image: '/Delicatessen.png' },
   { name: 'Bakery Shelf', image: '/bakershelf.png' }
 ];

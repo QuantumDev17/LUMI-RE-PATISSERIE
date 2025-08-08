@@ -71,7 +71,7 @@ export default function Contact() {
         {/* Image */}
         <div style={{ flex: '1 1 400px', maxWidth: '500px' }}>
           <img
-            src="/Home/sliced-bread.png"
+            src="/sliced-bread.png"
             alt="Sliced country bread"
             style={{
               width: '100%',

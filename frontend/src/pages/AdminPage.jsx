@@ -1,13 +1,23 @@
 import { useEffect, useState } from 'react';
-import ProductForm from '../components/ProductForm'; 
+import ProductForm from '../components/ProductForm';
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:3000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
+// Resolve local public images OR full URLs from DB
+function resolveImage(path = "") {
+  if (!path) return "";
+  if (path.startsWith("http")) return path; // Already full URL (Cloud/External)
+  if (path.startsWith("/uploads")) return `${API_BASE}${path}`; // Uploaded files
+  const base = import.meta.env.BASE_URL || "/";
+  return path.startsWith("/") ? base + path.slice(1) : base + path;
+}
 
 const AdminPage = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [error, setError] = useState("");
 
   const token = localStorage.getItem('token');
 
@@ -16,18 +26,26 @@ const AdminPage = () => {
     // eslint-disable-next-line
   }, []);
 
-  const fetchProducts = async () => {
+  const fetchProducts = async (category = "") => {
     try {
-      // ✅ Correct endpoint for all products
-      const res = await fetch(`${API_BASE}/api/products`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+      setLoading(true);
+      setError("");
+      const url = category
+        ? `${API_BASE}/api/products?category=${encodeURIComponent(category)}`
+        : `${API_BASE}/api/products?page=1&limit=1000`;
+
+      const res = await fetch(url, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        credentials: 'include'
       });
+
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
-      setProducts(data);
+      const list = Array.isArray(data) ? data : (data.items || []);
+      setProducts(list);
     } catch (err) {
       console.error('Failed to fetch products:', err);
+      setError(err.message || "Failed to fetch products");
     } finally {
       setLoading(false);
     }
@@ -46,15 +64,16 @@ const AdminPage = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this product?")) return;
     try {
-      await fetch(`${API_BASE}/api/products/${id}`, {
+      const res = await fetch(`${API_BASE}/api/products/${id}`, {
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        credentials: 'include'
       });
-      setProducts(products.filter(p => p._id !== id));
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      setProducts(p => p.filter(x => x._id !== id));
     } catch (err) {
       console.error('Failed to delete product:', err);
+      alert('Delete failed');
     }
   };
 
@@ -69,25 +88,27 @@ const AdminPage = () => {
         method,
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
-      if (!res.ok) throw new Error('Failed to save product');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
       await fetchProducts();
       setShowForm(false);
       setSelectedProduct(null);
     } catch (err) {
       console.error(err);
+      alert('Save failed');
     }
   };
 
-  const groupByCategory = (products) => {
-    return products.reduce((groups, product) => {
+  const groupByCategory = (list) => {
+    if (!Array.isArray(list)) return {};
+    return list.reduce((groups, product) => {
       const category = product.category?.trim() || 'Uncategorized';
-      if (!groups[category]) groups[category] = [];
-      groups[category].push(product);
+      (groups[category] ||= []).push(product);
       return groups;
     }, {});
   };
@@ -112,61 +133,55 @@ const AdminPage = () => {
         />
       )}
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : Object.keys(grouped).length === 0 ? (
+      {loading && <p>Loading…</p>}
+      {!loading && error && <p style={{ color: 'crimson' }}>{error}</p>}
+
+      {!loading && !error && Object.keys(grouped).length === 0 && (
         <p>No products found.</p>
-      ) : (
-        Object.keys(grouped).map(category => (
-          <div key={category} style={{ marginTop: '2rem' }}>
-            <h2>{category}</h2>
-            <table border="1" cellPadding="8" cellSpacing="0">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Price ($)</th>
-                  <th>Stock</th>
-                  <th>Category</th>
-                  <th>Image</th>
-                  <th>Created At</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {grouped[category].map(prod => (
-                  <tr key={prod._id}>
-                    <td>{prod.name}</td>
-                    <td>{prod.price}</td>
-                    <td>{prod.stock}</td>
-                    <td>{prod.category || 'Uncategorized'}</td>
-                    <td>
-                      {prod.image ? (
-                        <img
-                          src={prod.image}
-                          alt={prod.name}
-                          style={{
-                            width: '60px',
-                            height: '60px',
-                            objectFit: 'cover',
-                            borderRadius: '4px'
-                          }}
-                        />
-                      ) : (
-                        <span>No image</span>
-                      )}
-                    </td>
-                    <td>{new Date(prod.createdAt).toLocaleDateString()}</td>
-                    <td>
-                      <button onClick={() => handleEdit(prod)}>Edit</button>{' '}
-                      <button onClick={() => handleDelete(prod._id)}>Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))
       )}
+
+      {!loading && !error && Object.keys(grouped).map(category => (
+        <div key={category} style={{ marginTop: '2rem' }}>
+          <h2 style={{ textTransform: 'capitalize' }}>{category}</h2>
+          <table border="1" cellPadding="8" cellSpacing="0" style={{ width: '100%' }}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Price ($)</th>
+                <th>Stock</th>
+                <th>Category</th>
+                <th>Image</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(grouped[category] || []).map(prod => (
+                <tr key={prod._id}>
+                  <td>{prod.name}</td>
+                  <td>{Number(prod.price).toFixed(2)}</td>
+                  <td>{prod.stock ?? 0}</td>
+                  <td>{prod.category || 'Uncategorized'}</td>
+                  <td>
+                    {prod.image ? (
+                      <img
+                        src={resolveImage(prod.image)}
+                        alt={prod.name}
+                        style={{ width: 60, height: 60, objectFit: 'cover', borderRadius: 4 }}
+                      />
+                    ) : <span>No image</span>}
+                  </td>
+                  <td>{prod.createdAt ? new Date(prod.createdAt).toLocaleDateString() : "-"}</td>
+                  <td>
+                    <button onClick={() => handleEdit(prod)}>Edit</button>{' '}
+                    <button onClick={() => handleDelete(prod._id)}>Delete</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
     </div>
   );
 };

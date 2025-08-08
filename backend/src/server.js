@@ -7,22 +7,23 @@ import { connectDB } from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import imageRoutes from './routes/imageRoutes.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// ALLOW BOTH LOCALHOST AND VERCEL FRONTEND
+// ======== CORS CONFIG ========
+// Allow local dev + any Vercel frontend
 const allowedOrigins = [
   'http://localhost:5173',
-  /\.vercel\.app$/, // Allow any vercel.app subdomain (REGEX, see note below)
+  /\.vercel\.app$/ 
 ];
 
-// Use regex with CORS:
 app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true);
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); 
     if (
       allowedOrigins.includes(origin) ||
       /\.vercel\.app$/.test(origin)
@@ -31,9 +32,10 @@ app.use(cors({
     }
     callback(new Error('Not allowed by CORS'));
   },
-  credentials: true,
+  credentials: true
 }));
 
+// ======== MIDDLEWARE ========
 app.use(express.json());
 
 // ======== ROUTES ========
@@ -44,6 +46,7 @@ app.get('/', (req, res) => {
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/images', imageRoutes); // ✅ Serve image list
 
 // ======== ERROR HANDLING ========
 app.use((err, req, res, next) => {
@@ -54,6 +57,6 @@ app.use((err, req, res, next) => {
 // ======== CONNECT DB AND START SERVER ========
 connectDB().then(() => {
   app.listen(PORT, () => {
-    console.log('Server is running on PORT:', PORT);
+    console.log(`✅ Server running on port ${PORT}`);
   });
 });

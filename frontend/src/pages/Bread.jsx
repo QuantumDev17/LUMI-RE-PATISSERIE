@@ -1,106 +1,117 @@
-import React from 'react';
-import '../styles/Bread.css';
+// src/pages/Bread.jsx
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import '../styles/Bread.css'; // keep your existing styling (cards/grid)
 
-const breadProducts = [
-  {
-    name: '100% whole Wheat & Seeds',
-    image: '/Sourdough.png',
-    price: '$7.50'
-  },
-  {
-    name: 'Country Loaf with Sundried Tomatoes & Garlic',
-    image: '/Plain.png',
-    price: '$7.50'
-  },
-  {
-    name: 'Rye & Walnuts',
-    image: '/Rye.png',
-    price: '$7.50'
-  },
-  {
-    name: 'Classic Challah (Fridays Only)',
-    image: '/Classic Challah.jpg',
-    price: '$7.50'
-  },
-  {
-    name: 'German Baguette',
-    image: '/germanbaguette.jpg',
-    price: '$7.50'
-  },
-  {
-    name: 'Tartine',
-    image: '/Sun-dried.png',
-    price: '$7.50'
-  },
-  {
-    name: 'Country Loaf With Greek Olives',
-    image: '/Olive.png',
-    price: '$7.50'
-  },
-  {
-    name: 'Japanese Milk Bread',
-    image: '/japanesemilkbread.jpg',
-    price: '$10.50'
-  }
-];
+// Same env var you used elsewhere
+const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 
-function Bread() {
+// Convert stored image path to a usable <img src="">
+function resolveImage(path = '') {
+  if (!path) return '/placeholder.png';
+  if (path.startsWith('http')) return path;
+  if (path.startsWith('/')) return path;     // e.g. "/bread/Rye.png"
+  return `/${path}`;                          // e.g. "bread/Rye.png"
+}
+
+export default function Bread() {
+  const [items, setItems]  = useState([]);
+  const [loading, setLoad] = useState(true);
+  const [error, setError]  = useState('');
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setError('');
+        setLoad(true);
+
+        const res = await fetch(`${API_BASE}/api/products?category=bread`, {
+          headers: { Accept: 'application/json' },
+        });
+
+        const ct = res.headers.get('content-type') || '';
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!ct.includes('application/json')) throw new Error('Invalid server response');
+
+        const data = await res.json();
+        const list = Array.isArray(data) ? data : (data.items || []);
+        setItems(list);
+      } catch (e) {
+        console.error(e);
+        setError('Could not load breads. Please try again later.');
+      } finally {
+        setLoad(false);
+      }
+    })();
+  }, []);
+
   return (
     <div className="bread-page">
-      {/* Zoomed Banner */}
+      {/* Banner */}
       <div
         className="bread-banner"
         style={{
-          position: "relative",
+          position: 'relative',
           width: '100vw',
-          left: '50%',
-          right: '50%',
-          marginLeft: '-50vw',
-          marginRight: '-50vw',
+          left: '50%', right: '50%',
+          marginLeft: '-50vw', marginRight: '-50vw',
           background: "url('/bread.jpg') center/cover no-repeat",
-          minHeight: '500px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          paddingLeft: '80px',
-          overflow: 'hidden'
+          minHeight: 500,
+          display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start',
+          paddingLeft: 80, overflow: 'hidden'
         }}
       >
         <div style={{ color: 'white', textShadow: '0 2px 8px rgba(0,0,0,0.6)' }}>
           <p style={{
-            fontSize: '16px',
-            fontWeight: 500,
-            letterSpacing: '2px',
-            textTransform: 'uppercase',
-            marginBottom: '0.5rem',
-            fontFamily: "'Filson Pro', sans-serif"
+            fontSize: 16, fontWeight: 500, letterSpacing: '2px',
+            textTransform: 'uppercase', marginBottom: '0.5rem', fontFamily: "'Filson Pro', sans-serif"
           }}>
             Breads & Buns
           </p>
-          <h1 style={{
-            fontSize: '52px',
-            fontWeight: 500,
-            fontFamily: "'Filson Pro', sans-serif",
-            margin: 0
-          }}>
+          <h1 style={{ fontSize: 52, fontWeight: 500, fontFamily: "'Filson Pro', sans-serif", margin: 0 }}>
             Boulangerie
           </h1>
         </div>
       </div>
 
-      {/* Product Grid */}
+      {/* Sort (placeholder to match other pages) */}
+      <div className="sort-box">
+        <label>Sort by:</label>
+        <select>
+          <option>Best selling</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+        </select>
+      </div>
+
+      {/* Grid */}
       <div className="bread-collection">
-        {breadProducts.map((product, index) => (
-          <div key={index} className="bread-card">
-            <img src={product.image} alt={product.name} />
-            <h3>{product.name}</h3>
-            <p>{product.price}</p>
-          </div>
-        ))}
+        {loading ? (
+          <p>Loading…</p>
+        ) : error ? (
+          <p style={{ color: 'red' }}>{error}</p>
+        ) : items.length === 0 ? (
+          <p>No breads found.</p>
+        ) : (
+          items.map((p) => (
+            <Link
+              to={`/product/${p._id}`}
+              key={p._id}
+              style={{ textDecoration: 'none', color: 'inherit' }}
+            >
+              <div className="bread-card">
+                <img
+                  src={resolveImage(p.image)}
+                  alt={p.name}
+                  onError={(e) => (e.currentTarget.src = '/placeholder.png')}
+                />
+                <h3>{p.name}</h3>
+                <p>${Number(p.price).toFixed(2)}</p>
+              </div>
+            </Link>
+          ))
+        )}
       </div>
     </div>
   );
 }
-
-export default Bread;
