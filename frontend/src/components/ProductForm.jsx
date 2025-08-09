@@ -21,6 +21,7 @@ export default function ProductForm({ onClose, onSubmit, product }) {
   const PER_PAGE = 12;
 
   useEffect(() => {
+    // Pre-fill when editing
     if (product) {
       setFormData({
         name: product.name ?? '',
@@ -35,10 +36,35 @@ export default function ProductForm({ onClose, onSubmit, product }) {
       }
     }
 
-    fetch(`${API_BASE}/api/images`)
-      .then(r => r.json())
-      .then(data => setImages(Array.isArray(data) ? data : []))
-      .catch(err => console.error('Error fetching images:', err));
+    async function loadImages() {
+      // 1) Try backend /api/images (local dev, or if backend can see images)
+      try {
+        const r = await fetch(`${API_BASE}/api/images`, { headers: { Accept: 'application/json' } });
+        const ct = r.headers.get('content-type') || '';
+        if (r.ok && ct.includes('application/json')) {
+          const data = await r.json();
+          if (Array.isArray(data) && data.length) {
+            setImages(data);
+            return;
+          }
+        }
+      } catch (e) {
+        // ignore and fall back
+      }
+
+      // 2) Fallback to frontend-hosted manifest (works on Vercel)
+      try {
+        const r = await fetch('/image-manifest.json', { cache: 'no-store' });
+        if (r.ok) {
+          const data = await r.json();
+          if (Array.isArray(data)) setImages(data);
+        }
+      } catch (e) {
+        console.error('Could not load image manifest', e);
+      }
+    }
+
+    loadImages();
   }, [product]);
 
   // If user types a category, auto-switch tab
@@ -309,7 +335,7 @@ const styles = {
     cursor: 'pointer',
     fontSize: 14,
   },
-  // FIX: use full `border` (not borderColor) to avoid React warning
+  // use full border (not just borderColor) to avoid React warning
   tabActive: { background: '#16a34a', color: '#fff', border: '1px solid #16a34a' },
 
   pickerWrap: { display: 'grid', gridTemplateColumns: '1fr 260px', gap: 14, alignItems: 'start' },
