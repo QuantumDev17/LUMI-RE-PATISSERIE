@@ -17,12 +17,11 @@ const PORT = process.env.PORT || 3000;
 
 // --- resolve __dirname for ES modules ---
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname  = path.dirname(__filename);
 
 // ======== CORS CONFIG ========
 const allowedOrigins = [
   'http://localhost:5173',
-  // your production frontend(s) on Vercel:
   'https://lumie-re-patisserie.vercel.app',
 ];
 
@@ -41,7 +40,8 @@ app.use(cors({
 app.use(express.json());
 
 // ======== STATIC FILES (serve images from backend/public) ========
-const publicDir = path.join(__dirname, 'public');
+// IMPORTANT: server.js is in backend/src, so go up one level to ../public
+const publicDir = path.resolve(__dirname, '../public');
 // e.g. https://<backend-domain>/bread/japanese-milk-bread.png
 app.use(express.static(publicDir, { maxAge: '30d', index: false }));
 
