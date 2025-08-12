@@ -1,13 +1,17 @@
 // src/pages/AdminDashboard.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { API_BASE } from "../config";                // ✅ use single source of truth
+import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../config";
+import ProductForm from "../components/ProductForm";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
-  const [loading, setLoading]   = useState(true);
-  const [error, setError]       = useState("");
-  const [products, setProducts] = useState([]);
+
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState("");
+  const [products, setProducts]   = useState([]);
+  const [showForm, setShowForm]   = useState(false);
+  const [selected, setSelected]   = useState(null); // null = create, else edit
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -15,37 +19,95 @@ export default function AdminDashboard() {
       navigate("/");
       return;
     }
-
-    (async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const token = localStorage.getItem("token");
-        const res = await fetch(`${API_BASE}/api/products?page=1&limit=1000`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
-          // ❌ remove if you're not using cookie-based auth
-          // credentials: "include",
-        });
-
-        if (res.status === 401) {
-          navigate("/");
-          return;
-        }
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-        const data = await res.json();
-        const list = Array.isArray(data) ? data : (data.items || []);
-        setProducts(list);
-      } catch (e) {
-        console.error(e);
-        setError(e.message || "Failed to load dashboard data");
-      } finally {
-        setLoading(false);
-      }
-    })();
+    fetchProducts();
   }, [navigate]);
 
+  async function fetchProducts(category = "") {
+    try {
+      setLoading(true);
+      setError("");
+
+      const token = localStorage.getItem("token");
+      const url = category
+        ? `${API_BASE}/api/products?category=${encodeURIComponent(category)}`
+        : `${API_BASE}/api/products?page=1&limit=1000`;
+
+      const res = await fetch(url, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+
+      if (res.status === 401) {
+        navigate("/");
+        return;
+      }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const data = await res.json();
+      const list = Array.isArray(data) ? data : data.items || [];
+      setProducts(list);
+    } catch (e) {
+      console.error(e);
+      setError(e.message || "Failed to load dashboard data");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // CREATE/UPDATE
+  const handleFormSubmit = async (formData) => {
+    const token = localStorage.getItem("token");
+    const method = selected ? "PUT" : "POST";
+    const url = selected
+      ? `${API_BASE}/api/products/${selected._id}`
+      : `${API_BASE}/api/products`;
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const text = await res.text();
+      if (!res.ok) {
+        alert(text || `Save failed (HTTP ${res.status})`);
+        return;
+      }
+
+      await fetchProducts();
+      setShowForm(false);
+      setSelected(null);
+    } catch (err) {
+      console.error(err);
+      alert("Network error while saving.");
+    }
+  };
+
+  // DELETE
+  const handleDelete = async (id) => {
+    if (!window.confirm("Delete this product?")) return;
+    const token = localStorage.getItem("token");
+    try {
+      const res = await fetch(`${API_BASE}/api/products/${id}`, {
+        method: "DELETE",
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        alert(text || `Delete failed (HTTP ${res.status})`);
+        return;
+      }
+      setProducts((p) => p.filter((x) => x._id !== id));
+    } catch (err) {
+      console.error(err);
+      alert("Network error while deleting.");
+    }
+  };
+
+  // Stats + recent
   const countsByCategory = useMemo(() => {
     const map = {};
     for (const p of products) {
@@ -58,34 +120,56 @@ export default function AdminDashboard() {
   const totalProducts = products.length;
   const categories = Object.keys(countsByCategory).sort();
   const recent = useMemo(
-    () => [...products].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0, 6),
+    () =>
+      [...products]
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .slice(0, 6),
     [products]
   );
+
+  // Group for table
+  const grouped = useMemo(() => {
+    return products.reduce((acc, p) => {
+      const c = (p.category || "Uncategorized").trim();
+      (acc[c] ||= []).push(p);
+      return acc;
+    }, {});
+  }, [products]);
 
   return (
     <div style={{ maxWidth: 1100, margin: "40px auto", padding: "0 16px" }}>
       <h1 style={{ marginBottom: 8 }}>Admin Dashboard</h1>
-      <p style={{ marginTop: 0, color: "#666" }}>
-        Manage your products below.
-      </p>
+      <p style={{ marginTop: 0, color: "#666" }}>Manage your products below.</p>
 
       <div style={{ display: "flex", gap: 12, margin: "16px 0 24px" }}>
-        <Link to="/admin-dashboard" className="btn">Create Product</Link>
-        <Link to="/e-boutique" className="btn">View Storefront</Link>
+        <button className="btn" onClick={() => { setSelected(null); setShowForm(true); }}>
+          Create Product
+        </button>
+        <a className="btn" href="/e-boutique">View Storefront</a>
       </div>
+
+      {showForm && (
+        <ProductForm
+          onClose={() => { setShowForm(false); setSelected(null); }}
+          onSubmit={handleFormSubmit}
+          product={selected}
+        />
+      )}
 
       {loading && <p>Loading…</p>}
       {!loading && error && <p style={{ color: "crimson" }}>{error}</p>}
 
       {!loading && !error && (
         <>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16 }}>
+          {/* Stats */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 16, marginTop: 16 }}>
             <StatCard label="Total Products" value={totalProducts} />
             {categories.map((c) => (
               <StatCard key={c} label={`In ${c}`} value={countsByCategory[c]} />
             ))}
           </div>
 
+          {/* Recent */}
           <section style={{ marginTop: 28 }}>
             <h2 style={{ marginBottom: 12 }}>Recent Products</h2>
             {recent.length === 0 ? (
@@ -107,10 +191,54 @@ export default function AdminDashboard() {
                     <div style={{ fontSize: 12, color: "#888", marginTop: 6 }}>
                       Added {p.createdAt ? new Date(p.createdAt).toLocaleDateString() : "-"}
                     </div>
+                    <div style={{ marginTop: 8, display: "flex", gap: 8 }}>
+                      <button onClick={() => { setSelected(p); setShowForm(true); }}>Edit</button>
+                      <button onClick={() => handleDelete(p._id)}>Delete</button>
+                    </div>
                   </article>
                 ))}
               </div>
             )}
+          </section>
+
+          {/* Full list grouped by category */}
+          <section style={{ marginTop: 28 }}>
+            {Object.keys(grouped).map((cat) => (
+              <div key={cat} style={{ marginTop: 24 }}>
+                <h2 style={{ textTransform: "capitalize" }}>{cat}</h2>
+                <table border="1" cellPadding="8" cellSpacing="0" style={{ width: "100%" }}>
+                  <thead>
+                    <tr>
+                      <th>Name</th><th>Price ($)</th><th>Stock</th><th>Category</th><th>Image</th><th>Created At</th><th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {grouped[cat].map((p) => (
+                      <tr key={p._id}>
+                        <td>{p.name}</td>
+                        <td>{Number(p.price).toFixed(2)}</td>
+                        <td>{p.stock ?? 0}</td>
+                        <td>{p.category || "Uncategorized"}</td>
+                        <td>
+                          {p.image ? (
+                            <img
+                              src={resolveImage(p.image)}
+                              alt={p.name}
+                              style={{ width: 60, height: 60, objectFit: "cover", borderRadius: 4 }}
+                            />
+                          ) : <span>No image</span>}
+                        </td>
+                        <td>{p.createdAt ? new Date(p.createdAt).toLocaleDateString() : "-"}</td>
+                        <td>
+                          <button onClick={() => { setSelected(p); setShowForm(true); }}>Edit</button>{" "}
+                          <button onClick={() => handleDelete(p._id)}>Delete</button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ))}
           </section>
         </>
       )}
@@ -127,10 +255,10 @@ function StatCard({ label, value }) {
   );
 }
 
-// ✅ Build full image URL against the backend (images are served from backend/public)
+// Images in DB are relative to backend/public
 function resolveImage(path = "") {
   if (!path) return "";
   if (/^https?:\/\//i.test(path)) return path;
   const p = path.startsWith("/") ? path : `/${path}`;
-  return `${API_BASE}${p}`; // e.g. https://<backend>/bread/japanese-milk-bread.png
+  return `${API_BASE}${p}`;
 }

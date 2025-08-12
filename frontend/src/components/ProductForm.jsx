@@ -1,5 +1,6 @@
+// src/components/ProductForm.jsx
 import { useState, useEffect, useMemo } from 'react';
-import { API_BASE } from '../config';                 // ✅ use shared config
+import { API_BASE } from '../config'; // ✅ shared config
 
 const FOLDERS = [
   { key: 'cake',             label: 'Cake' },
@@ -71,6 +72,7 @@ export default function ProductForm({ onClose, onSubmit, product }) {
     loadImages();
   }, [product]);
 
+  // Keep the tab in sync with typed category
   useEffect(() => {
     const c = (formData.category || '').toLowerCase().trim();
     if (FOLDERS.some(f => f.key === c)) {
@@ -93,7 +95,7 @@ export default function ProductForm({ onClose, onSubmit, product }) {
 
   const handleImageSelect = relPath => {
     const withSlash = relPath.startsWith('/') ? relPath : `/${relPath}`;
-    setFormData(prev => ({ ...prev, image: withSlash }));  // ✅ store relative path in DB
+    setFormData(prev => ({ ...prev, image: withSlash })); // ✅ store relative path in DB
   };
 
   const handleSubmit = async e => {
@@ -310,3 +312,85 @@ export default function ProductForm({ onClose, onSubmit, product }) {
     </div>
   );
 }
+
+/* ---------- styles ---------- */
+const styles = {
+  card: { border: '1px solid #e5e7eb', borderRadius: 12, padding: 16, background: '#fff' },
+  title: { margin: '0 0 8px', fontSize: 22, fontWeight: 600 },
+  subTitle: { margin: '12px 0 8px', fontSize: 14, color: '#374151', fontWeight: 600 },
+  error: { background: '#fee2e2', color: '#991b1b', padding: '8px 10px', borderRadius: 8, marginBottom: 10, fontSize: 14 },
+
+  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
+  field: { display: 'flex', flexDirection: 'column', gap: 6 },
+  label: { fontSize: 13, color: '#374151' },
+  input: {
+    border: '1px solid #d1d5db',
+    borderRadius: 8,
+    padding: '10px 12px',
+    fontSize: 14,
+    outline: 'none',
+  },
+
+  tabs: { display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' },
+  tab: {
+    padding: '6px 12px',
+    borderRadius: 999,
+    border: '1px solid #d1d5db',
+    background: '#fff',
+    color: '#111827',
+    cursor: 'pointer',
+    fontSize: 14,
+  },
+  tabActive: { background: '#16a34a', color: '#fff', border: '1px solid #16a34a' },
+
+  pickerWrap: { display: 'grid', gridTemplateColumns: '1fr 260px', gap: 14, alignItems: 'start' },
+  pickerGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(92px, 1fr))', gap: 10 },
+  thumbBtn: { padding: 0, borderRadius: 12, overflow: 'hidden', background: '#fff', cursor: 'pointer' },
+  thumbImg: { width: 92, height: 92, objectFit: 'cover', display: 'block' },
+
+  preview: { border: '1px solid #e5e7eb', borderRadius: 12, padding: 10, background: '#fafafa' },
+  previewBox: {
+    width: '100%',
+    height: 180,
+    borderRadius: 10,
+    background: '#fff',
+    border: '1px solid #e5e7eb',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  previewImg: { width: '100%', height: '100%', objectFit: 'contain' },
+
+  pagination: { display: 'flex', alignItems: 'center', gap: 10, marginTop: 10 },
+  pageBtn: {
+    padding: '6px 12px',
+    border: '1px solid #d1d5db',
+    borderRadius: 8,
+    background: '#fff',
+    color: '#111827',
+    fontWeight: 600,
+    cursor: 'pointer',
+    lineHeight: 1.2,
+  },
+  pageInfo: { fontSize: 12, color: '#6b7280' },
+
+  actions: { display: 'flex', gap: 10, marginTop: 14 },
+  primaryBtn: {
+    padding: '10px 14px',
+    background: '#16a34a',
+    color: '#fff',
+    border: 'none',
+    borderRadius: 10,
+    cursor: 'pointer',
+    fontWeight: 600,
+  },
+  secondaryBtn: {
+    padding: '10px 14px',
+    background: '#fff',
+    color: '#111827',
+    border: '1px solid #d1d5db',
+    borderRadius: 10,
+    cursor: 'pointer',
+  },
+};

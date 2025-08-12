@@ -62,7 +62,7 @@ function Header() {
           <li><Link to="/e-boutique" style={linkStyle}>E-Boutique</Link></li>
           <li><Link to="/our-story" style={linkStyle}>Our Story</Link></li>
           <li><Link to="/contact" style={linkStyle}>Contact</Link></li>
-          <li><Link to="/gift-card" style={linkStyle}>Lumière Gift Card</Link></li>
+          {/* <li><Link to="/gift-card" style={linkStyle}>Lumière Gift Card</Link></li> */}
 
           {/* User sees "My Profile", but not if admin */}
           {user && user.role !== 'admin' && (
