@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 export default function AdminDashboard() {
   const navigate = useNavigate();

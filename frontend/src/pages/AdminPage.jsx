@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import ProductForm from '../components/ProductForm';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
 
 // Resolve local public images OR full URLs from DB
 function resolveImage(path = "") {
