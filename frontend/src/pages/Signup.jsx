@@ -21,26 +21,23 @@ function Signup() {
       const res = await fetch(`${API_BASE}/api/users/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        // credentials: 'include', // ❌ only if you use cookie-based auth
         body: JSON.stringify(formData),
       });
 
-      // Robust parse
+      const raw = await res.text();
+      console.log('Signup status:', res.status);
+      console.log('Signup raw body:', raw);
+
       let data;
-      try {
-        data = await res.json();
-      } catch {
-        const text = await res.text();
-        data = { message: text };
-      }
+      try { data = JSON.parse(raw); } catch { data = { message: raw }; }
 
       if (res.ok) {
         if (data.token) localStorage.setItem('token', data.token);
-        if (data.user)  localStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/user'); // go to profile/dashboard
-      } else {
-        alert(data.message || `Signup failed (HTTP ${res.status})`);
+        if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
+        return navigate('/user');
       }
+
+      alert(data.message || `Signup failed (HTTP ${res.status})`);
     } catch (err) {
       console.error('Signup error:', err);
       alert('Network error during signup. Please try again.');

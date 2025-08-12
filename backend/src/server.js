@@ -1,5 +1,5 @@
+// backend/src/server.js
 import express from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -19,30 +19,42 @@ const PORT = process.env.PORT || 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
-// ======== CORS CONFIG ========
+// ======== CORS (catch-all, handles preflight) ========
 const allowedOrigins = [
   'http://localhost:5173',
   'https://lumie-re-patisserie.vercel.app',
 ];
 
-app.use(cors({
-  origin(origin, cb) {
-    if (!origin) return cb(null, true); // allow server-to-server, curl, Postman
-    const ok = allowedOrigins.includes(origin) || /^https:\/\/.*\.vercel\.app$/.test(origin);
-    cb(ok ? null : new Error('Not allowed by CORS'), ok);
-  },
-  credentials: true,
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
-}));
+const isAllowedOrigin = (origin = '') =>
+  allowedOrigins.includes(origin) || /^https:\/\/.*\.vercel\.app$/.test(origin);
 
-// ======== MIDDLEWARE ========
+// Must be BEFORE static and routes
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin && isAllowedOrigin(origin)) {
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Vary', 'Origin');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  }
+
+  // Respond to preflight immediately
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
+// ======== BODY PARSER ========
 app.use(express.json());
 
 // ======== STATIC FILES (serve images from backend/public) ========
-// IMPORTANT: server.js is in backend/src, so go up one level to ../public
+// server.js is in backend/src → go up one level to ../public
 const publicDir = path.resolve(__dirname, '../public');
-// e.g. https://<backend-domain>/bread/japanese-milk-bread.png
+// e.g. https://<backend-domain>/bread/japanese-milk-bread.jpg
 app.use(express.static(publicDir, { maxAge: '30d', index: false }));
 
 // ======== ROUTES ========
@@ -50,7 +62,7 @@ app.get('/', (req, res) => {
   res.send('🍰 Lumière Patisserie API is running');
 });
 
-// Optional: quick debug to confirm public path in logs
+// Debug endpoint to confirm public path used
 app.get('/__where_are_images', (req, res) => {
   res.json({ publicDir });
 });
