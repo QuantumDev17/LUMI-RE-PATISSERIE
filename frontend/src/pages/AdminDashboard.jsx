@@ -6,7 +6,7 @@ const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 export default function AdminDashboard() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [error, setError]     = useState("");
+  const [error, setError] = useState("");
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function AdminDashboard() {
         setError("");
 
         const token = localStorage.getItem("token");
-        const res = await fetch(`${API_BASE}/api/products?page=1&limit=1000`, {
+        const res = await fetch(`${API_BASE}/api/products`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
           credentials: "include",
         });
