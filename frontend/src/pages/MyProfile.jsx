@@ -1,15 +1,14 @@
+// src/pages/MyProfile.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/MyProfile.css';
+import { API_BASE } from '../config';          // ✅ use shared config
 
 function MyProfile() {
-  const [user, setUser] = useState(null);
+  const [user, setUser]   = useState(null);
   const [error, setError] = useState('');
   const token = localStorage.getItem('token');
-
-  // Use env variable, fallback to localhost for dev
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
   useEffect(() => {
     // Show from localStorage instantly
@@ -24,11 +23,10 @@ function MyProfile() {
     const fetchProfile = async () => {
       try {
         const res = await axios.get(`${API_BASE}/api/users/profile`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          headers: { Authorization: `Bearer ${token}` },
+          // withCredentials: true, // ❌ only if you use cookie-based auth
         });
-        setUser(res.data); // update with fresh info
+        setUser(res.data);
         localStorage.setItem('user', JSON.stringify(res.data));
       } catch (err) {
         console.error('Profile fetch error:', err);
@@ -37,7 +35,7 @@ function MyProfile() {
     };
 
     fetchProfile();
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (

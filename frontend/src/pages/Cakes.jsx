@@ -1,23 +1,24 @@
+// src/pages/Cakes.jsx
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Cakes.css';
+import { API_BASE } from '../config';                // ✅ use shared config
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 const CATEGORY = 'cake';
 
+// ✅ Build full image URL from backend/public or accept full URLs
 function resolveImage(path = '') {
   if (!path) return '/placeholder.png';
-  if (path.startsWith('http')) return path;                   // absolute URL
-  if (path.startsWith('/uploads')) return `${API_BASE}${path}`; // served by backend
-  const base = import.meta.env.BASE_URL || '/';               // Vite public base
-  return path.startsWith('/') ? `${base}${path.slice(1)}` : `${base}${path}`;
+  if (/^https?:\/\//i.test(path)) return path;       // already absolute
+  const p = path.startsWith('/') ? path : `/${path}`;
+  return `${API_BASE}${p}`;                          // e.g. https://backend/cake/black-forest.jpg
 }
 
 export default function Cake() {
   const [allItems, setAllItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [sortBy, setSortBy] = useState('best');
+  const [loading, setLoading]   = useState(true);
+  const [error, setError]       = useState('');
+  const [sortBy, setSortBy]     = useState('best');
 
   useEffect(() => {
     let cancelled = false;
@@ -27,10 +28,10 @@ export default function Cake() {
         setError('');
         setLoading(true);
 
-        // Try server-side category first (lowercase)
-        const res = await fetch(`${API_BASE}/api/products?category=${encodeURIComponent(CATEGORY)}`, {
-          headers: { Accept: 'application/json' },
-        });
+        const res = await fetch(
+          `${API_BASE}/api/products?category=${encodeURIComponent(CATEGORY)}`,
+          { headers: { Accept: 'application/json' } }
+        );
 
         const ct = res.headers.get('content-type') || '';
         if (!res.ok || !ct.includes('application/json')) {
@@ -40,7 +41,6 @@ export default function Cake() {
         const data = await res.json();
         const list = Array.isArray(data) ? data : (data.items || []);
 
-        // Fallback: if server ignored the filter, filter on client
         const normalized = list.filter(
           (p) => (p.category || '').trim().toLowerCase() === CATEGORY
         );
@@ -67,16 +67,15 @@ export default function Cake() {
       case 'price-desc':
         items.sort((a, b) => Number(b.price) - Number(a.price));
         break;
-      // “best” = default order (newest first if backend already sorted)
       default:
-        break;
+        break; // “best” = current order
     }
     return items;
   }, [allItems, sortBy]);
 
   return (
     <div className="cake-page">
-      {/* Banner */}
+      {/* Banner - this path should be a FRONTEND public asset */}
       <div
         style={{
           position: 'relative',

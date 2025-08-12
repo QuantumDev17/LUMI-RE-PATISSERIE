@@ -2,27 +2,23 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/PersonalDesserts.css';
+import { API_BASE } from '../config';                     // ✅ shared config
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 const CATEGORY = 'personal-dessert';
 
-// Resolve images from:
-// - absolute URLs (http/https)
-// - backend uploads (/uploads/...)
-// - public files (/personal-dessert/..., /cake/..., etc.)
+// ✅ Resolve images from backend/public (relative paths) or accept full URLs
 function resolveImage(path = '') {
   if (!path) return '/placeholder.png';
-  if (path.startsWith('http')) return path;
-  if (path.startsWith('/uploads')) return `${API_BASE}${path}`;
-  const base = import.meta.env.BASE_URL || '/';
-  return path.startsWith('/') ? `${base}${path.slice(1)}` : `${base}${path}`;
+  if (/^https?:\/\//i.test(path)) return path;           // already absolute
+  const p = path.startsWith('/') ? path : `/${path}`;
+  return `${API_BASE}${p}`;                               // e.g. https://backend/personal-dessert/foo.jpg
 }
 
 export default function PersonalDesserts() {
-  const [items, setItems] = useState([]);
+  const [items, setItems]   = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [sortBy, setSortBy] = useState('best');
+  const [error, setError]     = useState('');
+  const [sortBy, setSortBy]   = useState('best');
 
   useEffect(() => {
     let cancelled = false;
@@ -32,7 +28,6 @@ export default function PersonalDesserts() {
         setError('');
         setLoading(true);
 
-        // Ask the API for this category; backend should be case-insensitive
         const res = await fetch(
           `${API_BASE}/api/products?category=${encodeURIComponent(CATEGORY)}`,
           { headers: { Accept: 'application/json' } }
@@ -44,11 +39,10 @@ export default function PersonalDesserts() {
         }
 
         const data = await res.json();
-        const list = Array.isArray(data) ? data : data.items || [];
+        const list = Array.isArray(data) ? data : (data.items || []);
 
-        // Defensive: filter client-side in case backend returns more
         const filtered = list.filter(
-          p => (p.category || '').trim().toLowerCase() === CATEGORY
+          (p) => (p.category || '').trim().toLowerCase() === CATEGORY
         );
 
         if (!cancelled) setItems(filtered);
@@ -73,7 +67,7 @@ export default function PersonalDesserts() {
 
   return (
     <div className="desserts-page">
-      {/* Banner */}
+      {/* Banner (frontend public asset) */}
       <div
         style={{
           position: 'relative',

@@ -1,17 +1,15 @@
 // src/pages/Bread.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/Bread.css'; // keep your existing styling (cards/grid)
+import '../styles/Bread.css';
+import { API_BASE } from '../config';                 // ✅ use shared config
 
-// Same env var you used elsewhere
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
-
-// Convert stored image path to a usable <img src="">
+// ✅ Convert stored relative path to full backend URL
 function resolveImage(path = '') {
   if (!path) return '/placeholder.png';
-  if (path.startsWith('http')) return path;
-  if (path.startsWith('/')) return path;     // e.g. "/bread/Rye.png"
-  return `/${path}`;                          // e.g. "bread/Rye.png"
+  if (/^https?:\/\//i.test(path)) return path;        // already full URL
+  const p = path.startsWith('/') ? path : `/${path}`;
+  return `${API_BASE}${p}`;                           // e.g. https://backend/bread/foo.jpg
 }
 
 export default function Bread() {
@@ -47,7 +45,7 @@ export default function Bread() {
 
   return (
     <div className="bread-page">
-      {/* Banner */}
+      {/* Banner (front-end public asset is fine) */}
       <div
         className="bread-banner"
         style={{
@@ -74,7 +72,7 @@ export default function Bread() {
         </div>
       </div>
 
-      {/* Sort (placeholder to match other pages) */}
+      {/* Sort (placeholder) */}
       <div className="sort-box">
         <label>Sort by:</label>
         <select>

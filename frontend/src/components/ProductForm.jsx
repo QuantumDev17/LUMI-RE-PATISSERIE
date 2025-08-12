@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
+import { API_BASE } from '../config';                 // ✅ use shared config
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
 const FOLDERS = [
   { key: 'cake',             label: 'Cake' },
   { key: 'bread',            label: 'Bread' },
@@ -8,6 +8,10 @@ const FOLDERS = [
   { key: 'one-bite',         label: 'One-bite' },
   { key: 'personal-dessert', label: 'Personal Dessert' },
 ];
+
+// ✅ helper to resolve relative image paths to full backend URL
+const toImg = (p = '') =>
+  /^https?:\/\//i.test(p) ? p : `${API_BASE}${p.startsWith('/') ? p : `/${p}`}`;
 
 export default function ProductForm({ onClose, onSubmit, product }) {
   const [formData, setFormData] = useState({
@@ -37,7 +41,7 @@ export default function ProductForm({ onClose, onSubmit, product }) {
     }
 
     async function loadImages() {
-      // 1) Try backend /api/images (local dev, or if backend can see images)
+      // 1) Try backend /api/images
       try {
         const r = await fetch(`${API_BASE}/api/images`, { headers: { Accept: 'application/json' } });
         const ct = r.headers.get('content-type') || '';
@@ -48,11 +52,11 @@ export default function ProductForm({ onClose, onSubmit, product }) {
             return;
           }
         }
-      } catch (e) {
-        // ignore and fall back
+      } catch {
+        // fall through
       }
 
-      // 2) Fallback to frontend-hosted manifest (works on Vercel)
+      // 2) Fallback to frontend manifest (optional)
       try {
         const r = await fetch('/image-manifest.json', { cache: 'no-store' });
         if (r.ok) {
@@ -67,7 +71,6 @@ export default function ProductForm({ onClose, onSubmit, product }) {
     loadImages();
   }, [product]);
 
-  // If user types a category, auto-switch tab
   useEffect(() => {
     const c = (formData.category || '').toLowerCase().trim();
     if (FOLDERS.some(f => f.key === c)) {
@@ -77,7 +80,6 @@ export default function ProductForm({ onClose, onSubmit, product }) {
   }, [formData.category]);
 
   const folderImages = useMemo(() => {
-    // only images in a subfolder that matches activeFolder
     return images.filter(p => p.includes('/') && p.split('/')[0].toLowerCase() === activeFolder);
   }, [images, activeFolder]);
 
@@ -91,7 +93,7 @@ export default function ProductForm({ onClose, onSubmit, product }) {
 
   const handleImageSelect = relPath => {
     const withSlash = relPath.startsWith('/') ? relPath : `/${relPath}`;
-    setFormData(prev => ({ ...prev, image: withSlash }));
+    setFormData(prev => ({ ...prev, image: withSlash }));  // ✅ store relative path in DB
   };
 
   const handleSubmit = async e => {
@@ -108,7 +110,7 @@ export default function ProductForm({ onClose, onSubmit, product }) {
       ...formData,
       price: Number(formData.price),
       stock: Number(formData.stock),
-      image: formData.image?.startsWith('/') ? formData.image : `/${formData.image}`,
+      image: formData.image.startsWith('/') ? formData.image : `/${formData.image}`,
     };
 
     try {
@@ -237,8 +239,9 @@ export default function ProductForm({ onClose, onSubmit, product }) {
                     boxShadow: selected ? '0 0 0 2px #bbf7d0 inset' : 'none'
                   }}
                 >
+                  {/* ✅ use backend URL for the thumbnail */}
                   <img
-                    src={`/${rel}`}
+                    src={toImg(rel)}
                     alt={rel}
                     style={styles.thumbImg}
                     onError={(e) => (e.currentTarget.style.opacity = 0.3)}
@@ -255,7 +258,8 @@ export default function ProductForm({ onClose, onSubmit, product }) {
             <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 6 }}>Preview</div>
             <div style={styles.previewBox}>
               {formData.image ? (
-                <img src={formData.image} alt="Selected" style={styles.previewImg} />
+                // ✅ also resolve preview against backend
+                <img src={toImg(formData.image)} alt="Selected" style={styles.previewImg} />
               ) : (
                 <span style={{ color: '#9ca3af' }}>No image selected</span>
               )}
@@ -306,86 +310,3 @@ export default function ProductForm({ onClose, onSubmit, product }) {
     </div>
   );
 }
-
-/* ---------- styles ---------- */
-const styles = {
-  card: { border: '1px solid #e5e7eb', borderRadius: 12, padding: 16, background: '#fff' },
-  title: { margin: '0 0 8px', fontSize: 22, fontWeight: 600 },
-  subTitle: { margin: '12px 0 8px', fontSize: 14, color: '#374151', fontWeight: 600 },
-  error: { background: '#fee2e2', color: '#991b1b', padding: '8px 10px', borderRadius: 8, marginBottom: 10, fontSize: 14 },
-
-  grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
-  field: { display: 'flex', flexDirection: 'column', gap: 6 },
-  label: { fontSize: 13, color: '#374151' },
-  input: {
-    border: '1px solid #d1d5db',
-    borderRadius: 8,
-    padding: '10px 12px',
-    fontSize: 14,
-    outline: 'none',
-  },
-
-  tabs: { display: 'flex', gap: 8, marginTop: 14, flexWrap: 'wrap' },
-  tab: {
-    padding: '6px 12px',
-    borderRadius: 999,
-    border: '1px solid #d1d5db',
-    background: '#fff',
-    color: '#111827',
-    cursor: 'pointer',
-    fontSize: 14,
-  },
-  // use full border (not just borderColor) to avoid React warning
-  tabActive: { background: '#16a34a', color: '#fff', border: '1px solid #16a34a' },
-
-  pickerWrap: { display: 'grid', gridTemplateColumns: '1fr 260px', gap: 14, alignItems: 'start' },
-  pickerGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(92px, 1fr))', gap: 10 },
-  thumbBtn: { padding: 0, borderRadius: 12, overflow: 'hidden', background: '#fff', cursor: 'pointer' },
-  thumbImg: { width: 92, height: 92, objectFit: 'cover', display: 'block' },
-
-  preview: { border: '1px solid #e5e7eb', borderRadius: 12, padding: 10, background: '#fafafa' },
-  previewBox: {
-    width: '100%',
-    height: 180,
-    borderRadius: 10,
-    background: '#fff',
-    border: '1px solid #e5e7eb',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  previewImg: { width: '100%', height: '100%', objectFit: 'contain' },
-
-  pagination: { display: 'flex', alignItems: 'center', gap: 10, marginTop: 10 },
-  pageBtn: {
-    padding: '6px 12px',
-    border: '1px solid #d1d5db',
-    borderRadius: 8,
-    background: '#fff',
-    color: '#111827',
-    fontWeight: 600,
-    cursor: 'pointer',
-    lineHeight: 1.2,
-  },
-  pageInfo: { fontSize: 12, color: '#6b7280' },
-
-  actions: { display: 'flex', gap: 10, marginTop: 14 },
-  primaryBtn: {
-    padding: '10px 14px',
-    background: '#16a34a',
-    color: '#fff',
-    border: 'none',
-    borderRadius: 10,
-    cursor: 'pointer',
-    fontWeight: 600,
-  },
-  secondaryBtn: {
-    padding: '10px 14px',
-    background: '#fff',
-    color: '#111827',
-    border: '1px solid #d1d5db',
-    borderRadius: 10,
-    cursor: 'pointer',
-  },
-};

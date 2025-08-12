@@ -2,21 +2,20 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/Cakes.css';
+import { API_BASE } from '../config';                    // ✅ use shared config
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000';
-
-// Turn whatever we stored into a usable <img src="">
+// ✅ Build full image URL from backend/public or accept full URLs
 function resolveImage(path = '') {
   if (!path) return '/placeholder.png';
-  if (path.startsWith('http')) return path;
-  if (path.startsWith('/')) return path;   // e.g. "/one-bite/12.png"
-  return `/${path}`;                        // e.g. "one-bite/12.png"
+  if (/^https?:\/\//i.test(path)) return path;          // already absolute
+  const p = path.startsWith('/') ? path : `/${path}`;
+  return `${API_BASE}${p}`;                             // e.g. https://backend/one-bite/12.png
 }
 
 export default function OneBite() {
-  const [items, setItems]   = useState([]);
-  const [loading, setLoad]  = useState(true);
-  const [error, setError]   = useState('');
+  const [items, setItems]  = useState([]);
+  const [loading, setLoad] = useState(true);
+  const [error, setError]  = useState('');
 
   useEffect(() => {
     (async () => {
@@ -24,9 +23,8 @@ export default function OneBite() {
         setError('');
         setLoad(true);
 
-        // Backend controller supports ?category= & pagination; we just filter by one-bite
         const res = await fetch(`${API_BASE}/api/products?category=one-bite`, {
-          headers: { Accept: 'application/json' }
+          headers: { Accept: 'application/json' },
         });
 
         const ct = res.headers.get('content-type') || '';
@@ -38,7 +36,7 @@ export default function OneBite() {
         setItems(list);
       } catch (e) {
         console.error(e);
-        setError('Could not load One‑Bite items. Please try again later.');
+        setError('Could not load One-Bite items. Please try again later.');
       } finally {
         setLoad(false);
       }
@@ -47,7 +45,7 @@ export default function OneBite() {
 
   return (
     <div className="cake-page">
-      {/* Full-width banner (swap the image if you like) */}
+      {/* Full-width banner (frontend public asset) */}
       <div
         style={{
           position: 'relative',
@@ -63,7 +61,7 @@ export default function OneBite() {
           fontSize: 22, fontWeight: 500, letterSpacing: '2px', textTransform: 'uppercase',
           marginBottom: '-3rem', textShadow: '1px 1px 5px rgba(0,0,0,.5)', fontFamily: "'Filson Pro', sans-serif"
         }}>
-          ONE‑BITE CREATIONS
+          ONE-BITE CREATIONS
         </p>
         <h1 style={{
           fontSize: 72, fontWeight: 150, textShadow: '2px 2px 6px rgba(0,0,0,.5)', fontFamily: "'Magnat', serif"
@@ -72,7 +70,7 @@ export default function OneBite() {
         </h1>
       </div>
 
-      {/* Sort placeholder to match other pages */}
+      {/* Sort placeholder */}
       <div className="sort-box">
         <label>Sort by:</label>
         <select>
@@ -89,7 +87,7 @@ export default function OneBite() {
         ) : error ? (
           <p style={{ color: 'red' }}>{error}</p>
         ) : items.length === 0 ? (
-          <p>No one‑bite creations found.</p>
+          <p>No one-bite creations found.</p>
         ) : (
           items.map(item => (
             <Link

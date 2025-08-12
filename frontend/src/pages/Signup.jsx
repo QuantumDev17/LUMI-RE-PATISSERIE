@@ -1,42 +1,51 @@
+// src/pages/Signup.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE } from '../config'; // ✅ single source of truth
 
 function Signup() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
-
-  // Use env variable, fallback to localhost
-  const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [pending, setPending] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData((s) => ({ ...s, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (pending) return;
+    setPending(true);
+
     try {
       const res = await fetch(`${API_BASE}/api/users/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        // credentials: 'include', // ❌ only if you use cookie-based auth
+        body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
+      // Robust parse
+      let data;
+      try {
+        data = await res.json();
+      } catch {
+        const text = await res.text();
+        data = { message: text };
+      }
 
       if (res.ok) {
-        // ✅ Store token and user after successful signup
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        navigate('/user'); // 🟢 fixed route to go directly to profile
+        if (data.token) localStorage.setItem('token', data.token);
+        if (data.user)  localStorage.setItem('user', JSON.stringify(data.user));
+        navigate('/user'); // go to profile/dashboard
       } else {
-        alert(data.message || 'Signup failed');
+        alert(data.message || `Signup failed (HTTP ${res.status})`);
       }
     } catch (err) {
       console.error('Signup error:', err);
+      alert('Network error during signup. Please try again.');
+    } finally {
+      setPending(false);
     }
   };
 
@@ -52,6 +61,7 @@ function Signup() {
           onChange={handleChange}
           required
           style={inputStyle}
+          autoComplete="name"
         />
         <input
           type="email"
@@ -61,6 +71,7 @@ function Signup() {
           onChange={handleChange}
           required
           style={inputStyle}
+          autoComplete="email"
         />
         <input
           type="password"
@@ -70,8 +81,11 @@ function Signup() {
           onChange={handleChange}
           required
           style={inputStyle}
+          autoComplete="new-password"
         />
-        <button type="submit" style={buttonStyle}>Create Account</button>
+        <button type="submit" style={buttonStyle} disabled={pending}>
+          {pending ? 'Creating…' : 'Create Account'}
+        </button>
       </form>
     </div>
   );
@@ -82,7 +96,7 @@ const inputStyle = {
   padding: '10px',
   marginBottom: '1rem',
   border: '1px solid #ccc',
-  borderRadius: '4px'
+  borderRadius: '4px',
 };
 
 const buttonStyle = {
@@ -91,7 +105,8 @@ const buttonStyle = {
   backgroundColor: '#000',
   color: '#fff',
   border: 'none',
-  borderRadius: '4px'
+  borderRadius: '4px',
+  cursor: 'pointer',
 };
 
 export default Signup;
